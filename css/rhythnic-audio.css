@@ -1,0 +1,48 @@
+#rhythnic-audio {
+    width: 37em;
+    height: 10em;
+}
+
+#controls {
+    display: inline-block;
+    width: 10em;
+    height: 10em;
+    border-radius: 2em;
+    background: rgba(0,0,0,.75);
+}
+
+#rhythnic-audio .playlist {
+    display: inline-block;
+    vertical-align: top;
+    width: 19em;
+    height: 10em;
+    overflow-y: auto;
+    border-radius: 1em;
+    border: 1px solid #888;
+    background: #d8d8d8;
+}
+
+#rhythnic-audio ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+#rhythnic-audio audio {
+    display: none;
+}
+
+#rhythnic-audio p {
+    margin:0;
+    line-height: 1.5;
+    padding: 0 .5em;
+}
+
+#rhythnic-audio li:hover {
+    cursor: pointer;
+}
+
+#rhythnic-audio li:nth-child(even){
+    background: #fff;
+}
+

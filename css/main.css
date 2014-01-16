@@ -1,0 +1,199 @@
+/* template base color:  00AA72  rgb(0, 170, 114) */
+
+/*
+*************************
+* elements
+*************************
+*/
+
+/* sectioning elements */
+
+body {
+    font: 70%/1.5 "Lucida Sans Unicode", "Lucida Grande", Lucida, Helvetica, Arial;
+    padding: 0; margin: 0;
+}
+
+section { padding: 0 .5em; margin-bottom: 4em; }
+
+/* text elements */
+
+h1 { display: none; }
+
+h2 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 1em;
+    font-weight: normal;
+    color: #fff;
+    padding: 0 .5em;
+}
+
+h3 {
+    color: #006f4a; 
+    text-align: center;
+    border-bottom: 1px solid #888;
+}
+
+h4 { padding: 1em; background: rgba(255, 128, 64, 0.2); }
+
+p { color: #424242; }
+
+a:link, a:visited { text-decoration: none; }
+a:link { color: #53DF00; }
+a:visited { color: #ffa273; }
+a:hover, a:focus, a: active { text-decoration: underline; }
+a:hover, a:focus { color: #689CD3; }
+a:active { color: #bdbdbd; }
+
+
+/* list elements */
+
+ol { padding-left: 1em; }
+dt { font-weight: bold; }
+dd { margin: 0 0 1em 2em; }
+
+
+/* misc elements */
+
+pre { margin: 0; }
+
+
+
+/*
+*************************
+* sections
+*************************
+*/
+
+
+/* article header */
+article header a {
+    display: block;
+    width: 10em;
+    margin: 0 auto 3em;
+    border: 0.1em solid #d8d8d8;
+    border-radius: 0.7em;
+    padding: 0.7em;
+    text-align: center;
+    background: rgba(255,255,255, 0.1);
+}
+
+article header a:hover, article header a:focus { color: #fff; }
+article header a:active { color: #bdbdbd; }
+
+/* article footer */
+article footer {
+    background: #689CD3;
+    padding: 1em 0.5em;
+    margin-top: 6em;
+}
+
+article footer p { color: #000; }
+article footer p:last-child { text-align: center; }
+
+
+/* container for header and slideshow demo */
+.title-and-demo {
+    background: #689CD3;
+    padding-top: 1px;
+    margin-bottom: 3em;
+    text-align: center;
+}
+
+.demo section {
+    display: block;
+    margin: 0 auto;
+    vertical-align: top;
+    width: 17em;
+}
+
+
+/* slideshow and demo container */
+.demo { padding: 0; margin: 0; }
+.demo h3 { display: none; }
+.demo h4 { background: none; text-align: center; }
+
+
+/*
+*************************
+* style classes
+*************************
+*/
+
+/* class for Rhythnic logo font */
+.logoFont { font-family: Quicksand, sans-serif; }
+
+h2 .logoFont {
+    font-size: 2em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5em;
+    color: #fff;
+    text-shadow: 0.06em 0.06em #ff5600;
+}
+
+
+/* code */
+code {
+    font: 0.9em "Courier New", Courier, monospace;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.codelist { border: 1px solid #aaa; }
+
+.codelist dt {
+    background: #ddd;
+    padding: 0.4em;
+    border-bottom: 0.1em solid #fff;
+}
+
+.codelist li { background: #fff; }
+
+.codelist code {
+    background: #eaeaea;
+    display: block;
+    border-bottom: 0.1em solid #fff;
+    border-right: 0.1em solid #fff;
+    padding: 0.1em 0.6em;
+}
+
+
+/*
+*************************
+* media queries
+*************************
+*/
+
+@media (min-width: 27em) {
+    .demo section {
+        display: inline-block;
+    }
+    
+    .demo section:nth-child(4) {
+        width: 37em;
+    }
+
+@media (min-width: 40em) {
+    body { font-size: 100%; }
+    
+    .title-and-demo {
+        padding-bottom: 1em;
+    }
+    
+    .audioplayer { font-size: 100%; }
+    
+    .demo section:nth-child(4) {
+        width: 30em;        
+    }
+}
+
+
+@media (min-width: 70em) {
+    .container { width: 70em; margin: 0 auto; }
+    .codelist { width: 60%; display: inline-block; }
+    .codedesc{ width: 38%; float: right; }
+}

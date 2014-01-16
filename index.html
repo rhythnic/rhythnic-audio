@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <title>Rhythnic Audio Player - Audio tag player with jQuery and CSS</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Rhytnic's audio player uses jQuery and jQueryUI to control the HTML5 audio tag and CSS with font icons to customize the skin.">
+    <link href="css/rhythnic-audio.css" rel="stylesheet">
+    <script src="js/modernizr.custom.59041.js"></script>
+</head>
+
+<body>
+    <div id="rhythnic-audio">
+        <div id="controls"></div>
+        <div class="playlist">
+            <ul>
+                <li>
+                    <audio controls preload='none'>
+                        <source src="audio/Rhythnic.mp3">
+                        <source src="audio/Rhythnic.ogg">
+                    </audio>
+                    <p>Rhythnic - The theme of our beautiful little one man company.</p>
+                </li>
+                <li>
+                    <audio controls preload='none'>
+                        <source src="audio/Ill-Make-You-Wonder.mp3">
+                        <source src="audio/Ill-Make-You-Wonder.ogg">
+                    </audio>
+                    <p>I'll Make You Wonder - Nicholas Alan</p>
+                </li>
+                <li>
+                    <audio controls preload='none'>
+                        <source src="audio/Cigarettes-In-Snowmen.mp3">
+                        <source src="audio/Cigarettes-In-Snowmen.ogg">
+                    </audio>
+                    <p>Cigarettes in Snowmen - Nicholas Alan</p>
+                </li>
+                <li>
+                    <audio controls preload='none'>
+                        <source src="audio/Cigarettes-In-Snowmen.mp3">
+                        <source src="audio/Cigarettes-In-Snowmen.ogg">
+                    </audio>
+                    <p>Cigarettes in Snowmen - Nicholas Alan</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.0.min.js"></script>
+<script src="js/rhythnic-audio.js"></script>
+
+<script defer>(function($){
+    
+    $('#rhythnic-audio').rhythnicaudio();
+    
+})(jQuery);</script>
+
+</body>
+</html>
