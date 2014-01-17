@@ -17,6 +17,9 @@ if ( typeof Object.create !== 'function' ) {
             self.cWidth = self.$controls.width(),
             self.cHeight = self.$controls.height();
             
+            self.options = $.extend({}, $.fn.rhythnicaudio.options, options);  //options array
+
+            
             self.drawControls();
             self.bindEvents();
 
@@ -25,45 +28,105 @@ if ( typeof Object.create !== 'function' ) {
         bindEvents: function() {
             var self = this;
             
-            self.play.on('click', function() {
+            self.play.on('click tap', function() {
                 this.hide();
                 self.pause.show();
                 self.playLayer.draw();
             }).on('mouseover', function() {
+                this.fill(self.options.color['play']['hover']);
+                self.playLayer.draw();
                 self.$controls.css('cursor', 'pointer'); 
             }).on('mouseout', function() {
+                this.fill(self.options.color['play']['default']);
+                self.playLayer.draw();
                 self.$controls.css('cursor', 'default'); 
+            }).on('mousedown', function() {
+                this.fill(self.options.color['play']['active']);
+                self.playLayer.draw();
             });
             
-            self.pause.on('click', function() {
+            self.pause.on('click tap', function() {
                 this.hide();
                 self.play.show();
                 self.playLayer.draw();
             }).on('mouseover', function() {
+                this.fill(self.options.color['pause']['hover']);
+                self.playLayer.draw();
                 self.$controls.css('cursor', 'pointer'); 
             }).on('mouseout', function() {
+                this.fill(self.options.color['pause']['default']);
+                self.playLayer.draw();
                 self.$controls.css('cursor', 'default'); 
-            });
+            }).on('mousedown', function() {
+                this.fill(self.options.color['pause']['active']);
+                self.playLayer.draw();
+            });;
             
             self.volUp.on('mouseover', function() {
-                this.fill('blue');
+                this.fill(self.options.color['volume']['hover']);
                 self.volumeLayer.draw();
                 self.$controls.css('cursor', 'pointer'); 
             }).on('mouseout', function() {
-                this.fill('#fff');
+                this.fill(self.options.color['volume']['default']);
                 self.volumeLayer.draw();
                 self.$controls.css('cursor', 'default');
+            }).on('mousedown', function() {
+                this.fill(self.options.color['volume']['active']);
+                self.volumeLayer.draw();
+            }).on('mouseup', function() {
+                this.fill(self.options.color['volume']['hover']);
+                self.volumeLayer.draw();
             });
             
             self.volDown.on('mouseover', function() {
-                this.fill('blue');
+                this.fill(self.options.color['volume']['hover']);
                 self.volumeLayer.draw();
                 self.$controls.css('cursor', 'pointer');
             }).on('mouseout', function() {
-                this.fill('#fff');
-                self.volumeLayer.draw();
+                this.fill(self.options.color['volume']['default']);
+                self.skipLayer.draw();
                 self.$controls.css('cursor', 'default');
+            }).on('mousedown', function() {
+                this.fill(self.options.color['volume']['active']);
+                self.volumeLayer.draw();
+            }).on('mouseup', function() {
+                this.fill(self.options.color['volume']['hover']);
+                self.volumeLayer.draw();
             });
+            
+            self.prev.on('mouseover', function() {
+                this.fill(self.options.color['skip']['hover']);
+                self.skipLayer.draw();
+                self.$controls.css('cursor', 'pointer'); 
+            }).on('mouseout', function() {
+                this.fill(self.options.color['skip']['default']);
+                self.skipLayer.draw();
+                self.$controls.css('cursor', 'default');
+            }).on('mousedown', function() {
+                this.fill(self.options.color['skip']['active']);
+                self.skipLayer.draw();
+            }).on('mouseup', function() {
+                this.fill(self.options.color['skip']['hover']);
+                self.skipLayer.draw();
+            });
+            
+            self.next.on('mouseover', function() {
+                this.fill(self.options.color['skip']['hover']);
+                self.skipLayer.draw();
+                self.$controls.css('cursor', 'pointer');
+            }).on('mouseout', function() {
+                this.fill(self.options.color['skip']['default']);
+                self.skipLayer.draw();
+                self.$controls.css('cursor', 'default');
+            }).on('mousedown', function() {
+                this.fill(self.options.color['skip']['active']);
+                self.skipLayer.draw();
+            }).on('mouseup', function() {
+                this.fill(self.options.color['skip']['hover']);
+                self.skipLayer.draw();
+            });
+            
+            
             
         },
         
@@ -79,7 +142,7 @@ if ( typeof Object.create !== 'function' ) {
                 y: self.cHeight/2,
                 sides: 3,
                 radius: self.cWidth / 5,
-                fill: '#00D2FF',
+                fill: self.options.color['play']['default'],
                 rotationDeg: -30
             });
             
@@ -99,7 +162,7 @@ if ( typeof Object.create !== 'function' ) {
                     // KineticJS specific context method
                     context.fillStrokeShape(this);
                 },
-                fill: '#fff',
+                fill: self.options.color['pause']['default'],
                 hitFunc: function(context) {
                   context.beginPath();
                   context.moveTo(self.cWidth/3.2, self.cHeight/3.2);
@@ -116,7 +179,7 @@ if ( typeof Object.create !== 'function' ) {
                 y: self.cHeight * .15,
                 sides: 3,
                 radius: self.cWidth / 10,
-                fill: '#fff'
+                fill: self.options.color['volume']['default']
             });
             
             self.volDown = new Kinetic.RegularPolygon({
@@ -124,7 +187,7 @@ if ( typeof Object.create !== 'function' ) {
                 y: self.cHeight * .85,
                 sides: 3,
                 radius: self.cWidth / 10,
-                fill: '#fff',
+                fill: self.options.color['volume']['default'],
                 rotationDeg: 60
             });
             
@@ -144,7 +207,7 @@ if ( typeof Object.create !== 'function' ) {
                     // KineticJS specific context method
                     context.fillStrokeShape(this);
                 },
-                fill: '#fff',
+                fill: self.options.color['skip']['default'],
                 hitFunc: function(context) {
                   context.beginPath();
                   context.moveTo(self.cWidth/1.2, self.cHeight/2.4);
@@ -172,7 +235,7 @@ if ( typeof Object.create !== 'function' ) {
                     // KineticJS specific context method
                     context.fillStrokeShape(this);
                 },
-                fill: '#fff',
+                fill: self.options.color['skip']['default'],
                 hitFunc: function(context) {
                   context.beginPath();
                   context.moveTo(self.cWidth/6, self.cHeight/2.4);
@@ -209,10 +272,13 @@ if ( typeof Object.create !== 'function' ) {
     
         //default options
         $.fn.rhythnicaudio.options = {
-            playColor: '#00ff00',
-            pauseColor: '#fff',
-            volumeColor: '#fff',
-            skipColor: '#fff'
+            color:
+                { 
+                    'play':   {'default': '#cfd7a9', 'hover': '#b2bf75', 'active': '#fff'},
+                    'pause':  {'default': '#b5cfd5', 'hover': '#84afb9', 'active': '#fff'},
+                    'volume': {'default': '#d8b5a5', 'hover': '#c18970', 'active': '#fff'},
+                    'skip':   {'default': '#b5cfd5', 'hover': '#84afb9', 'active': '#fff'},
+                }
         };
 
 })( jQuery, window, document );

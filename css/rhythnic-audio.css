@@ -8,7 +8,8 @@
     width: 10em;
     height: 10em;
     border-radius: 2em;
-    background: rgba(0,0,0,.75);
+    background: #FBF8EF;
+    border: 2px solid #E6E6E6;
 }
 
 #rhythnic-audio .playlist {
@@ -19,7 +20,7 @@
     overflow-y: auto;
     border-radius: 1em;
     border: 1px solid #888;
-    background: #d8d8d8;
+    background: #FBF8EF;
 }
 
 #rhythnic-audio ul {
