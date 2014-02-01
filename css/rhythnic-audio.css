@@ -1,49 +1,48 @@
-#rhythnic-audio {
-    width: 37em;
-    height: 10em;
+.rhythnic-audio {
+    width: 13.4em;
 }
 
-#controls {
+.rhythnic-audio .controls div {
+    position: relative;
     display: inline-block;
     width: 10em;
-    height: 10em;
-    border-radius: 2em;
-    background: #FBF8EF;
-    border: 2px solid #E6E6E6;
+    margin-left: .6em;
 }
 
-#rhythnic-audio .playlist {
-    display: inline-block;
-    vertical-align: top;
-    width: 19em;
-    height: 10em;
-    overflow-y: auto;
-    border-radius: 1em;
-    border: 1px solid #888;
-    background: #FBF8EF;
-}
-
-#rhythnic-audio ul {
+.rhythnic-audio  ul {
     list-style: none;
-    padding:0;
-    margin:0;
+    padding-left: 0;
 }
 
-#rhythnic-audio audio {
+.rhythnic-audio li {
+    padding: 0.2em;
+}
+
+.rhythnic-audio i {
+    font-size: 3em;
+}
+
+.rhythnic-audio .show-hide {
+    margin-left: .7em;
+    margin-top: -.5em;
+    position: relative;
+    top: .2em;
+}
+
+.rhythnic-audio label {
     display: none;
 }
 
-#rhythnic-audio p {
-    margin:0;
-    line-height: 1.5;
-    padding: 0 .5em;
+.rhythnic-audio input[type="range"]{
+    width: 100%;
 }
 
-#rhythnic-audio li:hover {
-    cursor: pointer;
+.rhythnic-audio span {
+    font-size: .9em;
+    margin-top: -.3em;
 }
 
-#rhythnic-audio li:nth-child(even){
-    background: #fff;
+.rhythnic-audio .time {
+    margin-left: .2em;
 }
 

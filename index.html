@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
-    <title>Rhythnic Audio Player - Audio tag player with jQuery and CSS</title>
+    <title>Rhythnic Audio Player</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Rhytnic's audio player uses jQuery and jQueryUI to control the HTML5 audio tag and CSS with font icons to customize the skin.">
+    <meta name="description" content="Rhytnic Audio Player - a simple, accessible audio player for the web">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="css/rhythnic-audio.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script src="js/modernizr.custom.59041.js"></script>
 </head>
 
 <body>
-    <div id="rhythnic-audio">
-        <div id="controls"></div>
+    <div class="rhythnic-audio" tabindex="0">
+        <div class="controls">
+            <i class="play fa fa-play" title="Play Pause"></i>
+            <div>
+                <label>Seek</label>
+                <input type="range" min="0" max="100" value="0" title="Seek">
+                <span class="time">0:00</span>/<span class="duration">0:00</span>
+                <i class="show-hide fa fa-caret-up" title="Show Hide Playlist"></i>
+            </div>
+        </div>
         <div class="playlist">
             <ul>
-                <li>
-                    <audio controls preload='none'>
-                        <source src="audio/Rhythnic.mp3">
-                        <source src="audio/Rhythnic.ogg">
-                    </audio>
-                    <p>Rhythnic - The theme of our beautiful little one man company.</p>
-                </li>
-                <li>
-                    <audio controls preload='none'>
-                        <source src="audio/Ill-Make-You-Wonder.mp3">
-                        <source src="audio/Ill-Make-You-Wonder.ogg">
-                    </audio>
-                    <p>I'll Make You Wonder - Nicholas Alan</p>
-                </li>
-                <li>
-                    <audio controls preload='none'>
-                        <source src="audio/Cigarettes-In-Snowmen.mp3">
-                        <source src="audio/Cigarettes-In-Snowmen.ogg">
-                    </audio>
-                    <p>Cigarettes in Snowmen - Nicholas Alan</p>
-                </li>
-                <li>
-                    <audio controls preload='none'>
-                        <source src="audio/Cigarettes-In-Snowmen.mp3">
-                        <source src="audio/Cigarettes-In-Snowmen.ogg">
-                    </audio>
-                    <p>Cigarettes in Snowmen - Nicholas Alan</p>
-                </li>
+                <li><a class="track" href="audio/Rhythnic.mp3" title="Scratchback Mp3">Scratchback</a></li>
+                <li><a class="track" href="audio/Ill-Make-You-Wonder.mp3">I'll Make You Wonder</a></li>
+                <li><a class="track" href="audio/Cigarettes-In-Snowmen.mp3">Cigarettes in Snowmen</a></li>
+                <li><a class="track" href="audio/A-Tired-Apartment.mp3">A-Tired-Apartment</a></li>
+                <li><a class="track" href="audio/Being-25">Being 25</a></li>
             </ul>
         </div>
     </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"><\/script>')</script>
-<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.0.min.js"></script>
 <script src="js/rhythnic-audio.js"></script>
 
 <script defer>(function($){
     
-    $('#rhythnic-audio').rhythnicaudio();
+    $('#rhythnic-audio').RhythnicAudio();
     
 })(jQuery);</script>
 

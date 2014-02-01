@@ -13,9 +13,8 @@ if ( typeof Object.create !== 'function' ) {
             var self = this;
             
             self.$elem = $(elem);
-            self.$controls = self.$elem.children("#controls");
-            self.cWidth = self.$controls.width(),
-            self.cHeight = self.$controls.height();
+            self.$controls = self.$elem.children(".controls");
+            self.$play = self.$controls.find(".play");
             
             self.options = $.extend({}, $.fn.rhythnicaudio.options, options);  //options array
 
@@ -128,157 +127,19 @@ if ( typeof Object.create !== 'function' ) {
             
             
             
-        },
-        
-        drawControls: function() {
-            var self = this;
-            self.stage = new Kinetic.Stage({ container: 'controls', width: self.cWidth, height: self.cHeight });
-            self.playLayer = new Kinetic.Layer(),
-            self.volumeLayer = new Kinetic.Layer(),
-            self.skipLayer = new Kinetic.Layer();
-            
-            self.play = new Kinetic.RegularPolygon({
-                x: self.cWidth/2.1,
-                y: self.cHeight/2,
-                sides: 3,
-                radius: self.cWidth / 5,
-                fill: self.options.color['play']['default'],
-                rotationDeg: -30
-            });
-            
-            self.pause = new Kinetic.Shape({
-                sceneFunc: function(context) {
-                    context.beginPath();
-                    context.moveTo(self.cWidth/3.2, self.cHeight/3.2);
-                    context.lineTo(self.cWidth/3.2, self.cHeight/1.45);
-                    context.lineTo(self.cWidth/2.29, self.cHeight/1.45);
-                    context.lineTo(self.cWidth/2.29, self.cHeight/3.2);
-                    context.lineTo(self.cWidth/3.2, self.cHeight/3.2);
-                    context.moveTo(self.cWidth/1.78, self.cHeight/3.2);
-                    context.lineTo(self.cWidth/1.78, self.cHeight/1.45);
-                    context.lineTo(self.cWidth/1.45, self.cHeight/1.45);
-                    context.lineTo(self.cWidth/1.45, self.cHeight/3.2);
-                    context.closePath();
-                    // KineticJS specific context method
-                    context.fillStrokeShape(this);
-                },
-                fill: self.options.color['pause']['default'],
-                hitFunc: function(context) {
-                  context.beginPath();
-                  context.moveTo(self.cWidth/3.2, self.cHeight/3.2);
-                  context.lineTo(self.cWidth/3.2, self.cHeight/1.45);
-                  context.lineTo(self.cWidth/1.45, self.cHeight/1.45);
-                  context.lineTo(self.cWidth/1.45, self.cHeight/3.2);
-                  context.closePath();
-                  context.fillStrokeShape(this);
-                }
-            });
-            
-            self.volUp = new Kinetic.RegularPolygon({
-                x: self.cWidth * .5,
-                y: self.cHeight * .15,
-                sides: 3,
-                radius: self.cWidth / 10,
-                fill: self.options.color['volume']['default']
-            });
-            
-            self.volDown = new Kinetic.RegularPolygon({
-                x: self.cWidth * .5,
-                y: self.cHeight * .85,
-                sides: 3,
-                radius: self.cWidth / 10,
-                fill: self.options.color['volume']['default'],
-                rotationDeg: 60
-            });
-            
-            self.next = new Kinetic.Shape({
-                sceneFunc: function(context) {
-                    context.beginPath();
-                    context.moveTo(self.cWidth/1.2, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/1.09, self.cHeight/2);
-                    context.lineTo(self.cWidth/1.09, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/1.06, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/1.06, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/1.09, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/1.09, self.cHeight/2);
-                    context.lineTo(self.cWidth/1.2, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/1.2, self.cHeight/2.4);
-                    context.closePath();
-                    // KineticJS specific context method
-                    context.fillStrokeShape(this);
-                },
-                fill: self.options.color['skip']['default'],
-                hitFunc: function(context) {
-                  context.beginPath();
-                  context.moveTo(self.cWidth/1.2, self.cHeight/2.4);
-                  context.lineTo(self.cWidth/1.2, self.cHeight/1.71);
-                  context.lineTo(self.cWidth/1.06, self.cHeight/1.71);
-                  context.lineTo(self.cWidth/1.06, self.cHeight/2.4);
-                  context.closePath();
-                  context.fillStrokeShape(this);
-                }
-            });
-            
-            self.prev = new Kinetic.Shape({
-                sceneFunc: function(context) {
-                    context.beginPath();
-                    context.moveTo(self.cWidth/6, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/12, self.cHeight/2);
-                    context.lineTo(self.cWidth/12, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/18.46, self.cHeight/2.4);
-                    context.lineTo(self.cWidth/18.46, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/12, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/12, self.cHeight/2);
-                    context.lineTo(self.cWidth/6, self.cHeight/1.71);
-                    context.lineTo(self.cWidth/6, self.cHeight/2.4);
-                    context.closePath();
-                    // KineticJS specific context method
-                    context.fillStrokeShape(this);
-                },
-                fill: self.options.color['skip']['default'],
-                hitFunc: function(context) {
-                  context.beginPath();
-                  context.moveTo(self.cWidth/6, self.cHeight/2.4);
-                  context.lineTo(self.cWidth/6, self.cHeight/1.71);
-                  context.lineTo(self.cWidth/18.46, self.cHeight/1.71);
-                  context.lineTo(self.cWidth/18.46, self.cHeight/2.4);
-                  context.closePath();
-                  context.fillStrokeShape(this);
-                }
-            });
-            
-                self.playLayer.add(self.play);
-                self.playLayer.add(self.pause);
-                self.pause.hide();
-                
-                self.volumeLayer.add(self.volUp);
-                self.volumeLayer.add(self.volDown);
-                
-                self.skipLayer.add(self.next);
-                self.skipLayer.add(self.prev);
-                
-                self.stage.add(self.playLayer);
-                self.stage.add(self.volumeLayer);
-                self.stage.add(self.skipLayer);
         }
     };
                     
-        $.fn.rhythnicaudio = function( options ) {
-            return this.each(function() {
-                var rhythnicaudio = Object.create( RhythnicAudio );
-                rhythnicaudio.init( options || {}, this );
-            });
-        };
-    
-        //default options
-        $.fn.rhythnicaudio.options = {
-            color:
-                { 
-                    'play':   {'default': '#cfd7a9', 'hover': '#b2bf75', 'active': '#fff'},
-                    'pause':  {'default': '#b5cfd5', 'hover': '#84afb9', 'active': '#fff'},
-                    'volume': {'default': '#d8b5a5', 'hover': '#c18970', 'active': '#fff'},
-                    'skip':   {'default': '#b5cfd5', 'hover': '#84afb9', 'active': '#fff'},
-                }
-        };
+    $.fn.RhythnicAudio = function( options ) {
+        return this.each(function() {
+            var RhythnicAudio = Object.create( RhythnicAudio );
+            RhythnicAudio.init( options || {}, this );
+        });
+    };
+
+    //default options
+    $.fn.RhythnicAudio.options = {
+
+    };
 
 })( jQuery, window, document );
