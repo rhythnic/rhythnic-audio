@@ -38,10 +38,15 @@
     
     var players = [],
         containers = Array.prototype.slice.call(document.querySelectorAll(".rhythnic-audio"));
-        
-    containers.forEach(function(container) {
-        players.push(new RhythnicAudio(container));
-    });
+    
+    try {
+        containers.forEach(function(container) {
+            players.push(new RhythnicAudio(container));
+        });
+    } catch (error) {
+        alert("Error:" + error.message);
+    }    
+    
 
 })(document, window);</script>
 

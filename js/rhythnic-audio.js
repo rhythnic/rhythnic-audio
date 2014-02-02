@@ -1,12 +1,17 @@
 function RhythnicAudio (elem, options) {
     var self = this;
     
-    self.elem = elem;
     self.audio = document.createElement('audio');
+    self.audioTest();
+    
+    self.elem = elem;
     self.controls = self.elem.children[0];
     self.play = self.controls.children[0];
-    self.tracks = null;
+    self.tracks = [];
+    self.titles = [];
     self.options = options || {};
+    
+    self.init();
 }
 
 RhythnicAudio.prototype.init = function() {
@@ -14,8 +19,14 @@ RhythnicAudio.prototype.init = function() {
     
     self.controls.style.display = "block";
     self.overrideOptions(self.defaultOptions, self.options);
-    self.tracks = self.getTracks(self.elem.children[1]);
+    self.getTracksAndTitles(self.elem.children[1], self.tracks, self.titles);
+    
     self.bindEvents();
+};
+
+RhythnicAudio.prototype.audioTest = function() {
+    if (!this.audio.canPlayType)
+        throw new Error("Your browser doesn't support the audio tag.\nPlaylist will be a list of audio links.");
 };
 
 RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
@@ -26,13 +37,12 @@ RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
     }
 };
 
-RhythnicAudio.prototype.getTracks = function(playlistContainer) {
-    
-    var tracks = [];
+RhythnicAudio.prototype.getTracksAndTitles = function(playlistContainer, tracks, titles) {
     
     function findLinkElement(element) {
         if (element.nodeName == "A") {
-            tracks.push(element);
+            tracks.push(element.href);
+            titles.push(element.innerText);
         } else {
             for (var i = 0; i < element.children.length; i++){
                 findLinkElement(element.children[i]);
@@ -41,7 +51,6 @@ RhythnicAudio.prototype.getTracks = function(playlistContainer) {
     };
     
     findLinkElement(playlistContainer);
-    return tracks;
 };
 
 RhythnicAudio.prototype.bindEvents = function() {
