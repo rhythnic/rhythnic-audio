@@ -11,14 +11,14 @@
 </head>
 
 <body>
-    <div class="rhythnic-audio" tabindex="0">
-        <div class="controls">
-            <i class="play fa fa-play" title="Play Pause"></i>
+    <div class="rhythnic-audio">
+        <div class="controls" tabindex="0">
+            <i class="play fa fa-play fa-fw" title="Play Pause"></i>
             <div>
                 <label>Seek</label>
-                <input type="range" min="0" max="100" value="0" title="Seek">
-                <span class="time">0:00</span>/<span class="duration">0:00</span>
-                <i class="show-hide fa fa-caret-up" title="Show Hide Playlist"></i>
+                <input class="seek" type="range" min="0" max="100" value="0" title="Seek">
+                <span class="time">0:00</span><span class="duration">/0:00</span>
+                <i class="show-hide fa fa-bars" title="Show Hide Playlist"></i>
             </div>
         </div>
         <div class="playlist">
@@ -34,11 +34,16 @@
 
 <script src="js/rhythnic-audio.js"></script>
 
-<script defer>(function($){
+<script defer>(function(document, window){
     
-    $('#rhythnic-audio').RhythnicAudio();
-    
-})(jQuery);</script>
+    var players = [],
+        containers = Array.prototype.slice.call(document.querySelectorAll(".rhythnic-audio"));
+        
+    containers.forEach(function(container) {
+        players.push(new RhythnicAudio(container));
+    });
+
+})(document, window);</script>
 
 </body>
 </html>

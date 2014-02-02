@@ -1,145 +1,70 @@
-// Utility  *for older browsers that don't support Object.create
-if ( typeof Object.create !== 'function' ) {
-    Object.create = function( obj ) {
-        function F(){};
-        F.prototype = obj;
-        return new F();
-    };
+function RhythnicAudio (elem, options) {
+    var self = this;
+    
+    self.elem = elem;
+    self.audio = document.createElement('audio');
+    self.controls = self.elem.children[0];
+    self.play = self.controls.children[0];
+    self.tracks = null;
+    self.options = options || {};
 }
 
-(function( $, window, document, undefined ) {
-    var RhythnicAudio = {
-        init: function( options, elem ) {
-            var self = this;
-            
-            self.$elem = $(elem);
-            self.$controls = self.$elem.children(".controls");
-            self.$play = self.$controls.find(".play");
-            
-            self.options = $.extend({}, $.fn.rhythnicaudio.options, options);  //options array
+RhythnicAudio.prototype.init = function() {
+    var self = this;
+    
+    self.controls.style.display = "block";
+    self.overrideOptions(self.defaultOptions, self.options);
+    self.tracks = self.getTracks(self.elem.children[1]);
+    self.bindEvents();
+};
 
-            
-            self.drawControls();
-            self.bindEvents();
+RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
+    for (var key in defaultOptions) {
+        if (!(key in userOptions)) {
+            userOptions[key] = defaultOptions[key];
+        }
+    }
+};
 
-        },
-        
-        bindEvents: function() {
-            var self = this;
-            
-            self.play.on('click tap', function() {
-                this.hide();
-                self.pause.show();
-                self.playLayer.draw();
-            }).on('mouseover', function() {
-                this.fill(self.options.color['play']['hover']);
-                self.playLayer.draw();
-                self.$controls.css('cursor', 'pointer'); 
-            }).on('mouseout', function() {
-                this.fill(self.options.color['play']['default']);
-                self.playLayer.draw();
-                self.$controls.css('cursor', 'default'); 
-            }).on('mousedown', function() {
-                this.fill(self.options.color['play']['active']);
-                self.playLayer.draw();
-            });
-            
-            self.pause.on('click tap', function() {
-                this.hide();
-                self.play.show();
-                self.playLayer.draw();
-            }).on('mouseover', function() {
-                this.fill(self.options.color['pause']['hover']);
-                self.playLayer.draw();
-                self.$controls.css('cursor', 'pointer'); 
-            }).on('mouseout', function() {
-                this.fill(self.options.color['pause']['default']);
-                self.playLayer.draw();
-                self.$controls.css('cursor', 'default'); 
-            }).on('mousedown', function() {
-                this.fill(self.options.color['pause']['active']);
-                self.playLayer.draw();
-            });;
-            
-            self.volUp.on('mouseover', function() {
-                this.fill(self.options.color['volume']['hover']);
-                self.volumeLayer.draw();
-                self.$controls.css('cursor', 'pointer'); 
-            }).on('mouseout', function() {
-                this.fill(self.options.color['volume']['default']);
-                self.volumeLayer.draw();
-                self.$controls.css('cursor', 'default');
-            }).on('mousedown', function() {
-                this.fill(self.options.color['volume']['active']);
-                self.volumeLayer.draw();
-            }).on('mouseup', function() {
-                this.fill(self.options.color['volume']['hover']);
-                self.volumeLayer.draw();
-            });
-            
-            self.volDown.on('mouseover', function() {
-                this.fill(self.options.color['volume']['hover']);
-                self.volumeLayer.draw();
-                self.$controls.css('cursor', 'pointer');
-            }).on('mouseout', function() {
-                this.fill(self.options.color['volume']['default']);
-                self.skipLayer.draw();
-                self.$controls.css('cursor', 'default');
-            }).on('mousedown', function() {
-                this.fill(self.options.color['volume']['active']);
-                self.volumeLayer.draw();
-            }).on('mouseup', function() {
-                this.fill(self.options.color['volume']['hover']);
-                self.volumeLayer.draw();
-            });
-            
-            self.prev.on('mouseover', function() {
-                this.fill(self.options.color['skip']['hover']);
-                self.skipLayer.draw();
-                self.$controls.css('cursor', 'pointer'); 
-            }).on('mouseout', function() {
-                this.fill(self.options.color['skip']['default']);
-                self.skipLayer.draw();
-                self.$controls.css('cursor', 'default');
-            }).on('mousedown', function() {
-                this.fill(self.options.color['skip']['active']);
-                self.skipLayer.draw();
-            }).on('mouseup', function() {
-                this.fill(self.options.color['skip']['hover']);
-                self.skipLayer.draw();
-            });
-            
-            self.next.on('mouseover', function() {
-                this.fill(self.options.color['skip']['hover']);
-                self.skipLayer.draw();
-                self.$controls.css('cursor', 'pointer');
-            }).on('mouseout', function() {
-                this.fill(self.options.color['skip']['default']);
-                self.skipLayer.draw();
-                self.$controls.css('cursor', 'default');
-            }).on('mousedown', function() {
-                this.fill(self.options.color['skip']['active']);
-                self.skipLayer.draw();
-            }).on('mouseup', function() {
-                this.fill(self.options.color['skip']['hover']);
-                self.skipLayer.draw();
-            });
-            
-            
-            
+RhythnicAudio.prototype.getTracks = function(playlistContainer) {
+    
+    var tracks = [];
+    
+    function findLinkElement(element) {
+        if (element.nodeName == "A") {
+            tracks.push(element);
+        } else {
+            for (var i = 0; i < element.children.length; i++){
+                findLinkElement(element.children[i]);
+            }
         }
     };
-                    
-    $.fn.RhythnicAudio = function( options ) {
-        return this.each(function() {
-            var RhythnicAudio = Object.create( RhythnicAudio );
-            RhythnicAudio.init( options || {}, this );
-        });
-    };
+    
+    findLinkElement(playlistContainer);
+    return tracks;
+};
 
-    //default options
-    $.fn.RhythnicAudio.options = {
+RhythnicAudio.prototype.bindEvents = function() {
+    var self = this;
+    
+    self.play.addEventListener("click", function(){
+        self.togglePlay(true);
+    }, false);
+};
 
-    };
+RhythnicAudio.prototype.togglePlay = function(play) {            
+    if ( play ) {
+        //this.audio.play();
+        this.play.className = this.play.className.replace(this.options.playIcon, this.options.pauseIcon);
+    } else {
+        //this.audio.pause();
+        this.play.className = this.play.className.replace(this.options.pauseIcon, this.options.playIcon);
+    }
+};
 
-})( jQuery, window, document );
+RhythnicAudio.prototype.defaultOptions = {
+    "hidePlaylist" : false,
+    "playIcon" : "fa-play",
+    "pauseIcon" : "fa-pause"
+};
+
