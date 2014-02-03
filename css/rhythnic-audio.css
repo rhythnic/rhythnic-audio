@@ -1,5 +1,7 @@
 .rhythnic-audio {
-    width: 13.4em;
+    width: 13.8em;
+    background: #fff;
+    text-align: left;
 }
 
 .rhythnic-audio .controls {
@@ -31,8 +33,8 @@
     padding: .2em .4em;
     height: 1.5em;
     opacity: 1;
-    -webkit-transition: height 1s, opacity 1s, padding-top 1s, padding-bottom 1s, -webkit-transform 1s;
-    transition: height 1s, opacity 1s, padding-top 1s, padding-bottom 1s, transform 1s;
+    -webkit-transition: height .3s, opacity .3s, padding-top .3s, padding-bottom .3s, -webkit-transform .3s;
+    transition: height .3s, opacity .3s, padding-top .3s, padding-bottom .3s, transform .3s;
 }
 
 .rhythnic-audio .hide li:not(.selected) {

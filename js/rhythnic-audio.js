@@ -2,25 +2,32 @@ function RhythnicAudio (elem, options) {
     var self = this;
     
     self.audio = document.createElement('audio');
-    self.audioTest();
+    self.audioTest(); //test browser support for the audio element
     
-    self.elem = elem;
-    self.controls = self.elem.children[0];
-    self.play = self.controls.children[0];
-    self.seek = self.controls.querySelector('.seek');
-    self.duration = self.elem.querySelector('.duration');
-    self.time = self.elem.querySelector('.time');
-    self.playlistView = self.elem.querySelector('.toggle-playlist-view');
-    self.second = null;
-    self.bTimeSlide = false;
-    self.options = options || {};
-    self.tracks = [];
-    self.titles = [];
-    self.current = 0;
+    self.elem = elem; //div container for the playlist
+    self.controls = self.elem.children[0]; //container for playlist controls
+    self.play = self.controls.children[0]; //play,pause icon element
+    self.seek = self.controls.querySelector('.seek'); //range input slider, seek
+    self.duration = self.elem.querySelector('.duration'); //song duration display
+    self.time = self.elem.querySelector('.time'); //song current time display
+    self.playlistView = self.elem.querySelector('.toggle-playlist-view'); //toggle playlist view icon element
+    self.second = null; //string used in formatTime method, to avoid variable creation every second
+    self.bTimeSlide = false; //boolean tells if seek bar is being dragged by the user
+    self.options = options || {}; //global options
+    self.tracks = []; //list of paths to audio files
+    self.titles = []; //list of 'a' element nodes, track list
+    self.current = 0; //current track
     
     self.init();
 }
 
+/* Test browser's support for the audio tag, throw error if no support */
+RhythnicAudio.prototype.audioTest = function() {
+    if (!this.audio.canPlayType)
+        throw new Error("Your browser doesn't support the audio tag.\nPlaylist will be a list of audio links.");
+};
+
+/* Initialize audio player, assemble tracks, test for MIME support, bind events */
 RhythnicAudio.prototype.init = function() {
     var self = this;
     
@@ -29,12 +36,21 @@ RhythnicAudio.prototype.init = function() {
     self.getTracksAndTitles(self.elem.children[1]);
     self.audioSetup();
     self.bindEvents();
-    if (self.tracks.length > 1 && self.options.hidePlaylist) {
-        self.options.hidePlaylist = false;
-        self.togglePlaylistView();
-    }
+    
+    if (self.tracks.length <= 1) {
+        self.playlistView.style.display = "none";
+    } else {
+        if (self.options.hidePlaylist) {
+            self.options.hidePlaylist = false;
+            self.togglePlaylistView();
+        }
+        
+        if (self.options.lockPlaylist)
+            self.playlistView.style.display = "none";
+    } 
 };
 
+/* Bind event listeners for mouse, touch, and keyboard */
 RhythnicAudio.prototype.bindEvents = function() {
     var self = this;
     
@@ -51,6 +67,8 @@ RhythnicAudio.prototype.bindEvents = function() {
             e.preventDefault();
             if (this.parentElement.className.indexOf("selected") == -1) {
                 self.playTrack(self.titles.indexOf(this));
+            } else {
+                self.togglePlay(self.audio.paused);
             }
         }, false);
     });
@@ -68,7 +86,21 @@ RhythnicAudio.prototype.bindEvents = function() {
         self.bTimeSlide = false;
     }, false);
     
-    self.controls.addEventListener("keyup", function(e) {
+    self.seek.addEventListener("touchstart", function() {
+        self.bTimeSlide = true;
+    }, false);
+    
+    self.seek.addEventListener("touchmove", function() {
+        self.time.innerHTML = self.formatTime(self.seek.value);
+    }, false);
+    
+    self.seek.addEventListener("touchend", function() {
+        self.audio.currentTime = self.seek.value;
+        self.bTimeSlide = false;
+    }, false);
+    
+    self.elem.addEventListener("keyup", function(e) {
+        e.preventDefault();
         switch(e.keyCode){
             case 32:
                 self.togglePlay(self.audio.paused);
@@ -82,7 +114,8 @@ RhythnicAudio.prototype.bindEvents = function() {
         }
     }, false);
     
-    self.controls.addEventListener("keydown", function(e) {
+    self.elem.addEventListener("keydown", function(e) {
+        e.preventDefault();
         switch(e.keyCode){
             case 38:
                 self.audio.volume = (self.audio.volume < 0.95) ? self.audio.volume + .05 : 1;
@@ -93,12 +126,12 @@ RhythnicAudio.prototype.bindEvents = function() {
         }
     }, false);
     
-    self.audio.addEventListener("loadedmetadata", function() {
+    self.audio.addEventListener("loadedmetadata", function(e) {
         if (self.audio.duration != Number.POSITIVE_INFINITY && self.audio.duration != Number.NEGATIVE_INFINITY){
             self.seek.max = self.audio.duration;
             self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
         } else {
-            self.duration.innerHTML = "0:00";
+            self.duration.innerHTML = "?:??";
         }
     }, false);
     
@@ -118,17 +151,22 @@ RhythnicAudio.prototype.bindEvents = function() {
     }, false);                
 };
 
+/*  Setup and initiate track playback of track at index
+    Remove selected class from previous track, add to new track */
 RhythnicAudio.prototype.playTrack = function(index) {
     this.titles[this.current].parentElement.className =
-        this.titles[this.current].parentElement.className.replace(' selected', '');
-    //if ( this.options.hidePlaylist ) this.$titles.eq(this.current).hide();
-    this.setCurrent(index);
+    this.titles[this.current].parentElement.className.replace(' selected', '');
+    this.current = (index < 0) ? this.tracks.length - 1 : index % this.tracks.length;
     this.titles[this.current].parentElement.className += " selected";
-    //show this.titles[this.current]
     this.audio.src = this.tracks[this.current];
     this.togglePlay( this.audio.paused );
 };
 
+/* Test whether the browser supports the MIME type in global options variable
+    If no support, check the tracks key in the global options other file types
+    that might be supported.  Provided files should be in a set that is referenced
+    by a string for their MIME type.  If a supported MIME type is found, set the
+    global tracks variable to that set of file paths. */
 RhythnicAudio.prototype.audioSetup = function() {
     if (this.audio.canPlayType('audio/' + this.options.mime)) {
         this.audio.type = 'audio/' + this.options.mime;
@@ -148,6 +186,7 @@ RhythnicAudio.prototype.audioSetup = function() {
     this.titles[this.current].parentElement.className += " selected";
 };
 
+/* Toggle play and pause, swap icon classes */
 RhythnicAudio.prototype.togglePlay = function(play) {            
     if ( play ) {
         this.audio.play();
@@ -158,11 +197,8 @@ RhythnicAudio.prototype.togglePlay = function(play) {
     }
 };
 
-RhythnicAudio.prototype.audioTest = function() {
-    if (!this.audio.canPlayType)
-        throw new Error("Your browser doesn't support the audio tag.\nPlaylist will be a list of audio links.");
-};
-
+/*  Query for all A elements, store in global titles
+    Get the hrefs and store them in the global tracks */
 RhythnicAudio.prototype.getTracksAndTitles = function(playlistContainer) {
     var self = this;
     self.titles = self.querySelectAll(playlistContainer, ["A"]);
@@ -171,6 +207,9 @@ RhythnicAudio.prototype.getTracksAndTitles = function(playlistContainer) {
     });
 };
 
+/*  Wrote this due to problems with querySelectorAll, but it does the same thing
+    Find all occurances of any element in the set "tags" that occur in "container"
+    Put them into a set and return the set */
 RhythnicAudio.prototype.querySelectAll = function(container, tags) {
     var result = [];
     
@@ -188,6 +227,8 @@ RhythnicAudio.prototype.querySelectAll = function(container, tags) {
     return result;
 };
 
+/*  Toggle showing and hiding the playlist by adding and removing the "hide" class
+    to/from the playlist container.  The transition rules are set in the CSS. */
 RhythnicAudio.prototype.togglePlaylistView = function() {
     if (this.options.hidePlaylist == true) {
         this.elem.children[1].className = 
@@ -199,18 +240,14 @@ RhythnicAudio.prototype.togglePlaylistView = function() {
     }
 };
 
-//format seconds to display as 0:00
+/* format seconds to display as 0:00 */
 RhythnicAudio.prototype.formatTime = function( time ) {
     this.second = Math.floor( time % 60 ).toString();
     this.second = (this.second.length > 1) ? this.second : '0' + this.second;
     return Math.floor( time / 60 ) + ':' + this.second;
 };
 
-//set current image
-RhythnicAudio.prototype.setCurrent = function (index) {
-    this.current = (index < 0) ? this.tracks.length - 1 : index % this.tracks.length;
-};
-
+/* Override default options with user provided options */
 RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
     for (var key in defaultOptions) {
         if (!(key in userOptions)) {
@@ -219,9 +256,11 @@ RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
     }
 };
 
+/* Default options */
 RhythnicAudio.prototype.defaultOptions = {
     "mime" : "mp4",
     "hidePlaylist" : false,
+    "lockPlaylist" : false,
     "playIcon" : "fa-play",
     "pauseIcon" : "fa-pause",
     "tracks" : {}
