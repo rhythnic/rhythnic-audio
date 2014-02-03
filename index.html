@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
     <title>Rhythnic Audio Player</title>
     <meta charset="UTF-8" />
@@ -18,7 +18,7 @@
                 <label>Seek</label>
                 <input class="seek" type="range" min="0" max="100" value="0" title="Seek">
                 <span class="time">0:00</span><span class="duration">/0:00</span>
-                <i class="show-hide fa fa-bars" title="Show Hide Playlist"></i>
+                <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
             </div>
         </div>
         <div class="playlist">
@@ -27,7 +27,7 @@
                 <li><a class="track" href="audio/Ill-Make-You-Wonder.mp3">I'll Make You Wonder</a></li>
                 <li><a class="track" href="audio/Cigarettes-In-Snowmen.mp3">Cigarettes in Snowmen</a></li>
                 <li><a class="track" href="audio/A-Tired-Apartment.mp3">A-Tired-Apartment</a></li>
-                <li><a class="track" href="audio/Being-25">Being 25</a></li>
+                <li><a class="track" href="audio/Being-25.mp3">Being 25</a></li>
             </ul>
         </div>
     </div>
@@ -41,7 +41,12 @@
     
     try {
         containers.forEach(function(container) {
-            players.push(new RhythnicAudio(container));
+            players.push(new RhythnicAudio(container,
+            {
+                "mime": "mpeg",
+                "tracks": {"ogg": ["audio/Rhythnic.ogg", "audio/Ill-Make-You-Wonder.ogg",
+                    "audio/Cigarettes-In-Snowmen.ogg", "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
+            }));
         });
     } catch (error) {
         alert("Error:" + error.message);
