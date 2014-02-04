@@ -66,10 +66,6 @@
     color: #808080;
 }
 
-.rhythnic-audio i:active {
-    color: #d8d8d8;
-}
-
 .rhythnic-audio .toggle-playlist-view {
     font-size: 1.5em;
     margin-left: 1.3em;

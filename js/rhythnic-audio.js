@@ -11,7 +11,6 @@ function RhythnicAudio (elem, options) {
     self.duration = self.elem.querySelector('.duration'); //song duration display
     self.time = self.elem.querySelector('.time'); //song current time display
     self.playlistView = self.elem.querySelector('.toggle-playlist-view'); //toggle playlist view icon element
-    self.second = null; //string used in formatTime method, to avoid variable creation every second
     self.bTimeSlide = false; //boolean tells if seek bar is being dragged by the user
     self.options = options || {}; //global options
     self.tracks = []; //list of paths to audio files
@@ -102,31 +101,21 @@ RhythnicAudio.prototype.bindEvents = function() {
     self.elem.addEventListener("keyup", function(e) {
         e.preventDefault();
         switch(e.keyCode){
-            case 32:
-                self.togglePlay(self.audio.paused);
-                break;
-            case 37:
-                self.playTrack(self.current - 1);
-                break;
-            case 39:
-                self.playTrack(self.current + 1);
-                break;
+            case 32: self.togglePlay(self.audio.paused); break;
+            case 37: self.playTrack(self.current - 1); break;
+            case 39: self.playTrack(self.current + 1); break;
         }
     }, false);
     
     self.elem.addEventListener("keydown", function(e) {
         e.preventDefault();
         switch(e.keyCode){
-            case 38:
-                self.audio.volume = (self.audio.volume < 0.95) ? self.audio.volume + .05 : 1;
-                break;
-            case 40:
-                self.audio.volume = (self.audio.volume > 0.05) ? self.audio.volume - .05 : 0;
-                break;
+            case 38: self.audio.volume = (self.audio.volume < 0.95) ? self.audio.volume + .05 : 1; break;
+            case 40: self.audio.volume = (self.audio.volume > 0.05) ? self.audio.volume - .05 : 0; break;
         }
     }, false);
     
-    self.audio.addEventListener("loadedmetadata", function(e) {
+    self.audio.addEventListener("loadedmetadata", function() {
         if (self.audio.duration != Number.POSITIVE_INFINITY && self.audio.duration != Number.NEGATIVE_INFINITY){
             self.seek.max = self.audio.duration;
             self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
@@ -242,9 +231,8 @@ RhythnicAudio.prototype.togglePlaylistView = function() {
 
 /* format seconds to display as 0:00 */
 RhythnicAudio.prototype.formatTime = function( time ) {
-    this.second = Math.floor( time % 60 ).toString();
-    this.second = (this.second.length > 1) ? this.second : '0' + this.second;
-    return Math.floor( time / 60 ) + ':' + this.second;
+    var seconds = Math.floor(time % 60);
+    return Math.floor( time / 60 ) + ':' + (seconds < 10 ? '0' + seconds : seconds);
 };
 
 /* Override default options with user provided options */
