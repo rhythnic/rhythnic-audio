@@ -206,7 +206,7 @@
                 At the top of the rhythnic-audio.css file, there's a rule for the rhythnic-audio container.  Use that
                 to position and size the player.  All the elements in the player are sized with ems, so you can use the
                 font-size rule for the rhythnic-audio container to scale the player up and down.
-                If anyone wants to send me an alternate css theme, I'll try to include it in the package for the player,
+                If anyone wants to send me an alternate css theme, I'll include it in the package for the player,
                 so that people can have some fast, easy options for a nice-looking player.
             </p>
             <p class="codedesc">  With font-size set to 100%, the audio player
@@ -230,76 +230,75 @@
             specify a height for the player, the height that it has when opened, assuming that you're not using a border
             and background color for the player.  Else, put it in another div and specify the height for that div.
         </p>
-        <p class="codedesc">If your curious about the code used to modify the player to achieve the alternate layout
-            at the top of the page, the code for that is at the bottom of the css file.
+        <p>If your curious about the code used to modify the player to achieve the alternate layout
+            at the top of the page, the code for that is at the bottom of the rhythnic-audio.css file.
         </p>
         </section>
         <section>
             <h4>The Javascript</h4>
-            <p>Put rhythnic-audio.min.js, modernizr.custom.59041.js, and jquery.ui-slider.js in your script directory (js).
-                The Rhythnic rhythnic-audio depends on jQuery and the other js files, so you have to link to them
-                before linking to the rhythnic-audio.js file. The best place to include scripts, Modernizr excluded, is
-               at the bottom of the body container.
-            </p>
-            <p class="codedesc">  The first 2 lines get jQuery from Google's CDN with jquery.com as a fallback.  The 3rd and 4th line
-                import the jquery.ui-slider and rhythnic-audio javascript files.  Inside of jQuery.ui-slider.js I've cut and pasted the code
-                for touch-punch, a jQuery plugin that enables touch events for jQuery ui.
+            <p class="codedesc">Put rhythnic-audio.min.js into your script directory (js).  At the bottom of our html file, just inside the body
+            closing tage, we'll put our line to rhythnic-audio.js and write the script to create the player.
             </p>
             <dl class="codelist">
-                <dt>Link to jQuery, jquery ui slider, and rhythnic-audio</dt>
+                <dt>Link to rhythnic-audio.js</dt>
                 <dd>
                     <ol>
-                        <li><code>&lt;script src = "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;</code></li>
-                        <li><code>&lt;script&gt;window.jQuery || document.write('&lt;script src="//codeorigin.jquery.com/jquery-1.10.2.min.js"&gt;&lt;\/script&gt;')&lt;/script&gt;</code></li>
-                        <li><code>&lt;script src="js/jquery-ui-slider.js"&gt;&lt;/script&gt;</code></li>
                         <li><code>&lt;script src="js/rhythnic-audio.min.js"&gt;&lt;/script&gt;</code></li> 
                     </ol>
                 </dd>
             </dl>
-
-            <p class="codedesc">This code will create the rhythnic-audio for all divs that have a class of rhythnic-audio.  If you have multiple
-                audio players on the same page, replace the ".rhythnic-audio" query with a class or id that is unique to each player.
-                The Rhythnic Audio Player supports 3 MIME types, mp4, ogg, and mpeg.  To support all browsers, you should include an ogg
-                file and either an mp4 or mpeg file for each song in the playlist.  Use the MIME type as the keys for the dictionaries
-                in the playlist.
+            <p class="codedesc">This code will create a player for the div contianer with a class of rhythnic-audio.  If you have multiple
+                audio players on the same page, repeat the code for each player and use unique class names.
             </p>
             <dl class="codelist">
                 <dt>One song player</dt>
                 <dd>
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
-                        <li><pre><code>  (function ($) {</code></pre></li>
-                        <li><pre><code>    $('div.rhythnic-audio').rhythnic-audio({</code></pre></li>
-                        <li><pre><code>      playlist: [{</code></pre></li>
-                        <li><pre><code>          mp4: "path/to/mp4/file.m4a",</code></pre></li>
-                        <li><pre><code>          ogg: "path/to/ogg/file.ogg",</code></pre></li>
-                        <li><pre><code>          mpeg: "path/to/mp3/file.mp3"</code></pre></li>
-                        <li><pre><code>      }]</code></pre></li>
-                        <li><pre><code>    });</code></pre></li>
-                        <li><pre><code>  })(jQuery);</code></pre></li>
+                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"));</code></pre></li>
+                        <li><pre><code>  player.init();</code></pre></li>
                         <li><code>&lt;/script&gt;</code></li>
                     </ol>
                 </dd>
             </dl>
-            <p class="codedesc">The playlist is a set of dictionaries.  Include one dictionary for every song in the playlist.
+        </section>
+        <section>
+            <h4>Audio type support</h4>
+            <p>The player's default option for mime type is mp4, because that seems to be the most widely supported.
+                If you're unfamiliar, different browsers support different types of audio files, so you player allows
+                you to include several audio types, just in case. The default mime type (mp4) is referring to the links to the
+                audio files inside of the player html.  In my experience, declaring an mp4 mime type also allows for the playback
+                of mp3 files too, but just to be safe, if you're using files that aren't of the mp4 mime type, then override the
+                default mime type by passing the new mime type as an option when you create the player in javascript.
+            </p>
+            <p class="codedesc">To add a backup audio type, pass it in with the options object.  The "tracks" key refers to another
+                object that holds the file paths.  Inside of the tracks object, create keys for the mime types and use sets of
+                strings for your audio paths as the value to those mime type keys.
             </p>
             <dl class="codelist">
-                <dt>Playlist player</dt>
+                <dt>Specifying an mpeg mime type</dt>
                 <dd>
                     <ol>
-                        <li><code>$('div.rhythnic-audio').rhythnic-audio({</code></li>
-                        <li><pre><code>  playlist:</code></pre></li>
-                        <li><pre><code>    [{</code></pre></li>
-                        <li><pre><code>      mp4: "audio/Moon-River.aac",</code></pre></li>
-                        <li><pre><code>      ogg: "audio/Moon-River.oga",</code></pre></li>
-                        <li><pre><code>    },{</code></pre></li>
-                        <li><pre><code>      mp4: "audio/Rock-And-Or-Roll.aac",</code></pre></li>
-                        <li><pre><code>      ogg: "audio/Rock-And-Or-Roll.oga",</code></pre></li>
-                        <li><pre><code>    },{</code></pre></li>
-                        <li><pre><code>      mp4: "audio/Outrageous.aac",</code></pre></li>
-                        <li><pre><code>      ogg: "audio/Outrageous.oga",</code></pre></li>
-                        <li><pre><code>    }]</code></pre></li>
-                        <li><code>});</code></li>
+                        <li><code>&lt;script&gt;</code></li>
+                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"),</code></pre></li>
+                        <li><pre><code>         { "mime" : "mpeg" });</code></pre></li>
+                        <li><pre><code>  player.init();</code></pre></li>
+                        <li><code>&lt;/script&gt;</code></li>
+                    </ol>
+                </dd>
+            </dl>
+            <p class="codedesc">In this example, we're using an mp4 mime type file in our link, and providing mp3 and ogg backup files.
+                In reality you only need mp3 or mp4, because all browsers that support mp4 also support mp3 and visa versa.</p>
+            <dl class="codelist">
+                <dt>Adding backup audio files</dt>
+                <dd>
+                    <ol>
+                        <li><code>&lt;script&gt;</code></li>
+                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"),</code></pre></li>
+                        <li><pre><code>         { "tracks" : { "ogg" : [buttons-and-bows.oga],</code></pre></li>
+                        <li><pre><code>                        "mpeg" : [buttons-and-bows.mp3] } });</code></pre></li>
+                        <li><pre><code>  player.init();</code></pre></li>
+                        <li><code>&lt;/script&gt;</code></li>
                     </ol>
                 </dd>
             </dl>
@@ -365,6 +364,7 @@
                 </dd>
             </dl>
         </section>
+        
     </div></section>
     <section><div class="container">
         <h3>Rhythnic Audio Player is open source</h3>
