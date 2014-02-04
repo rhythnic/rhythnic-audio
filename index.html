@@ -11,12 +11,12 @@
 </head>
 
 <body>
-<h1>Rhythnic Audio Player - audio tag player with jQuery and CSS</h1>
+<h1>Rhythnic Audio Player - simple, accesible, HTML5 audio player</h1>
 <article>
     <div class="title-and-demo">
         <div class="container">
             <header>
-                <h2><span class="logoFont">Rhythnic</span> Audio Player <small>using the HTML5 audio tag, jQuery, and CSS</small></h2>
+                <h2><span class="logoFont">Rhythnic</span> Audio Player <small>a simple, accessible, customizable HTML5 audio player</small></h2>
             </header>
             <section class="demo">
                 <h3>Rhythnic Audio Player Examples</h3>
@@ -27,7 +27,7 @@
                             <i class="play fa fa-play fa-fw" title="Play Pause"></i>
                             <div>
                                 <label>Seek</label>
-                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek">
+                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
                                 <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
                             </div>
@@ -45,7 +45,7 @@
                             <i class="play fa fa-play fa-fw" title="Play Pause"></i>
                             <div>
                                 <label>Seek</label>
-                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek">
+                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
                                 <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
                             </div>
@@ -66,7 +66,7 @@
                             <i class="play fa fa-play fa-fw" title="Play Pause"></i>
                             <div>
                                 <label>Seek</label>
-                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek">
+                                <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
                                 <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
                             </div>
@@ -100,7 +100,13 @@
         <p>The Rhythnic Audio Player is a a light-weight, highly customizable audio player for the web.  It utilizes the audio tag,
             javascript, and css to give you a logo-free music player that you can style with css.  It isn't built to enable a flash
             fallback for broswers that don't support the audio tag.  The way I see it, if Google stops supporting IE8, then I can too.
-            In the case that javascript is disabled, the browsers default audio tag will display.
+            If a browser doesn't support the audio tag or javascript, the playlist displays as a list of links to audio files.
+        </p>
+        <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
+            On the downside, there are bound to be issues the come up, but we'll cross those bridges as we come to Internet Explorer. For now,
+            I've kept the player lightweight in anticipation that support for HTML5 standards will only get better.  You can change the styling
+            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses font icons so that you can
+            change their color with css.  Let's get into the player a little bit so you can get it working, if this is what you're looking for.
         </p>
     </div></section>
     <section><div class="container">
@@ -113,12 +119,10 @@
             <dd>The HTML file for this tutorial page.</dd>
             <dt>css</dt>
             <dd>main.css - the css file for this tutorial page</dd>
-            <dd>audioplayer.css - the css file for the audio player</dd>
+            <dd>rhythnic-audio.css - the css file for the audio player</dd>
             <dt>js</dt>
-            <dd>jQuery-ui-slider.js - minimized jQuery UI file with only slider functionality</dd>
-            <dd>audioplayer.min.js - minimized version of the audioplayer.js file</dd>
-            <dd>audioplayer.js - the javascript file for the audioplayer</dd>
-            <dd>modernizr.custom.59041.js - Modernizr file to detect audio tag support</dd>
+            <dd>rhythnic-audio.js - the javascript file for the player</dd>
+            <dd>rhythnic-audio.min.js - minimized version of the rhythnic-audio.js file</dd>
         </dl>
         </section>
         <section>
@@ -126,62 +130,57 @@
         <p>Let's go over the code for the HTML file that will include the audio player.  We'll start at the top and work down.
         
         </p>
-        <p class="codedesc">The HEAD<br>Link to font awesome to enable the icons to display.  Put audioplayer.css in your css folder
+        <p class="codedesc">The HEAD <i class="fa fa-male"></i> <i class="fa fa-female"></i><br>Link to Font Awesome to enable the icons to display.  Put rhythnic-audio.css in your css folder
             and link to it.  The file main.css refers to whatever your primary css file is for your page.  It's not referring to the
-            main.css in the zip file.  If you copy and paste the rules from audioplayer.css into your primary css file, you can omit the
-            link to audioplayer.css.  Add a link to the custom Modernizr file and add the class "no-js" to the HTML tag so that
-            we can control what happens if javascript is disabled.
+            main.css in the zip file (that's for this here page, dag nabbit).  If you copy and paste the rules from rhythnic-audio.css
+            into your primary css file, you can omit the link to rhythnic-audio.css.
         </p>
         <dl class="codelist">
             <dt>The HEAD:  CSS, Font Awesome, Viewport</dt>
             <dd>
                 <ol>
-                    <li><code>&lt;html lang="en" class="no-js"&gt;</code></li>
+                    <li><code>&lt;html lang="en"&gt;</code></li>
                     <li><code>&lt;head&gt;</code></li>
                     <li><pre><code>  &lt;meta charset="UTF-8"&gt;</code></pre></li>
                     <li><pre><code>  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</code></pre></li>
                     <li><pre><code>  &lt;title&gt;Your page title&lt;/title&gt;</code></pre></li>
                     <li><pre><code>  &lt;link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"&gt;</code></pre></li>
-                    <li><pre><code>  &lt;link href="/css/audioplayer.css" rel="stylesheet"&gt;</code></pre></li>
+                    <li><pre><code>  &lt;link href="/css/rhythnic-audio.css" rel="stylesheet"&gt;</code></pre></li>
                     <li><pre><code>  &lt;link href="/css/main.css" rel="stylesheet"&gt;</code></pre></li>
-                    <li><pre><code>  &lt;script src=js/modernizr.custom.59041.js&gt;&lt;/script&gt;</code></pre></li>
                     <li><code>&lt;/head&gt;</code></li>
                 </ol>
             </dd>
         </dl>
-        <p class="codedesc">Next, let's look at the HTML for the audio player.  The first thing is the audio tag.  The audio tag is here in case the user has javascript disabled.
-            You can choose which file types you want to support inside of the audio tag.  I would suggest ogg/oga for Firefox and Opera and either mp4/mp3/aac for other browsers.
-            These references to the files aren't accessed by the Rhythnic Audio Player. They are just there for use by the audio tag as a fallback.
-            You can also put a Flash player fallback inside of the audio tag, in case the browser doesn't support the audio tag.  If either javascript or the audio
-            tag are disabled, the Rhythnic Audio Player isn't displayed and only the audio tag is displayed. If either javascript or the audio
-            tag are disabled, the Rhythnic Audio Player isn't displayed and only the audio tag is displayed.  If broswer supports the audio tag, you'll see the single track
-            player.  If it doesn't support the audio tag, whether or not javascript is enabled, you'll see the Flash player fallback.
-            The players for a single track and playlists look very similar.  You don't have to differentiate in the code. It's determined
-            automatically by how many list items you have in you list.
+        <p>FREEDOM! (Voice of the late Chris Farely: Did you see that part where Mel Gibson was all like "FREEDOM"?  That was awesome!)</p>
+        <p>Let's look at the player HTML.  When I say freedom, what I mean is this:  you can change the order of the elements inside of the
+            controls div, and you can include multiple lists of type ul or ol, or both, with headers or images in between and all that jazz.
+            But don't get too carried away or it'll become the css version of a Christmas lights knot.
+            You can alter all the colors and styling via css, but we already talked about that.
+        </p>
+        <p class="codedesc">This example is for a one song player.  There's no difference to creating a playlist player or a one banger.
+            The only difference is in the number of songs you include in the list.  If there's only one song, the player will remove the
+            icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback, but that's where
+            the player gets the info for the track titles and the paths to the audio files.  Make sure to keep all the class names the same (with the
+            exception of changing the font icon system, but more on that later).  The javascript uses the class names to find the elements.
+            If you use the code exactly as is, you shouldn't have any problems, and if it ain't broke don't fix it.
         </p>
         <dl class="codelist">
-        <dt>The audio player container</dt>
+        <dt>The rhythnic-audio container</dt>
         <dd>
             <ol>
-                <li><code>&lt;div class="audioplayer"&gt;</code></li>
-                <li><pre><code>  &lt;audio controls preload='auto'&gt;</code></pre></li>
-                <li><pre><code>    &lt;source src="audio/Rhythnic.mp3"&gt;</code></pre></li>
-                <li><pre><code>    &lt;source src="audio/Rhythnic.ogg"&gt;</code></pre></li>
-                <li><pre><code>    &lt;p&gt;Your browser doesn't support the Audio tag&lt;/p&gt;</code></pre></li>
-                <li><pre><code>  &lt;/audio&gt;</code></pre></li>
-                <li><pre><code>  &lt;div class='controls'&gt;</code></pre></li>
-                <li><pre><code>    &lt;i class="play fa fa-play"&gt;&lt;/i&gt;</code></pre></li>
+                <li><code>&lt;div class="rhythnic-audio" tabindex="0"&gt;</code></li>
+                <li><pre><code>  &lt;div class="controls"&gt;</code></pre></li>
+                <li><pre><code>    &lt;i class="play fa fa-play fa-fw" title="Play Pause"&gt;&lt;/i&gt;</code></pre></li>
                 <li><pre><code>    &lt;div&gt;</code></pre></li>
-                <li><pre><code>      &lt;div class="seek"&gt;&lt;/div&gt;</code></pre></li>
-                <li><pre><code>      &lt;i class="skip fa fa-step-forward"&gt;&lt;/i&gt;</code></pre></li>
-                <li><pre><code>      &lt;i class="mute fa fa-volume-up" title="mute"&gt;&lt;/i&gt;</code></pre></li>
-                <li><pre><code>      &lt;div class="volume"&gt;&lt;/div&gt;</code></pre></li>
-                <li><pre><code>      &lt;i class="toggleList fa fa-bars" title="Show/Hide Playlist"&gt;&lt;/i&gt;</code></pre></li>
+                <li><pre><code>      &lt;label&gt;Seek&lt;/label&gt;</code></pre></li>
+                <li><pre><code>      &lt;input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1"&gt;</code></pre></li>
+                <li><pre><code>      &lt;span class="time"&gt;0:00&lt;/span&gt;&lt;span class="duration"&gt;/0:00&lt;/span&gt;</code></pre></li>
+                <li><pre><code>      &lt;i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"&gt;&lt;/i&gt;</code></pre></li>
                 <li><pre><code>    &lt;/div&gt;</code></pre></li>
                 <li><pre><code>  &lt;/div&gt;</code></pre></li>
-                <li><pre><code>  &lt;div class='playlist'&gt;</code></pre></li>
+                <li><pre><code>  &lt;div class="playlist"&gt;</code></pre></li>
                 <li><pre><code>    &lt;ul&gt;</code></pre></li>
-                <li><pre><code>      &lt;li&gt;Song Title&gt;&lt;li&gt;</code></pre></li>
+                <li><pre><code>      &lt;li&gt;&lt;a href="audio/buttons-and-bows.mp3" title="Buttons and Bows"&gt;Buttons and Bows&lt;/a&gt;&lt;li&gt;</code></pre></li>
                 <li><pre><code>    &lt;/ul&gt;</code></pre></li>
                 <li><pre><code>  &lt;/div&gt;</code></pre></li>
                 <li><code>&lt;/div&gt;</code></li>
@@ -194,126 +193,72 @@
             free and very user friendly.
         </p>
         <p>I chose to include the entire Font Awesome collection by linking to it in the head section for a few reasons,
-            even though we're downloading more than is necessary. The first reason is that it keeps the audioplayer package simple.
-            Also, the less I integrate the font icon system, the easier it is for developers to integrate the audioplayer plugin
-            with the other font icons on their site, whether they are using Font Awesome or another font icon system.
-            You're welcome to use another font icon system, but you have to change the class names to match whatever you decide to use.
-            You'll also need to specify the new class names in the options object when you create the jQuery object.  This is explained
-            better in the options section below.  Beginning developers will also benifit from the simplicity of linking
-            to Font Awesome in the head.
+            even though we're downloading more than is necessary. The first reason is that it keeps the rhythnic-audio package simple.
+            Also, the less I integrate the font icon system, the easier it is for developers to integrate the rhythnic-audio plugin
+            with the other font icon systems. You're welcome to use another font icon system, but you have to change the class names to
+            match whatever you decide to use. You'll also need to specify the new class names in the options object when you create the
+            jQuery object.  This is explained better in the options section below.
         </p>
-        <p class="codedesc">You can also have multiple lists, with headers, in the audioplayer container.  They will be assembled
-            into one list for playback, but you can display them separately.  
-        </p>
-        <dl class="codelist">
-        <dt>Multiple lists</dt>
-        <dd>
-            <ol>
-                <li><code>...</code></li>
-                <li><code>&lt;div class='playlist'&gt;</code></li>
-                <li><pre><code>  &lt;h3&gt;Group 1&lt;/h3&gt;</code></pre></li>
-                <li><pre><code>  &lt;ul&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 1A&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 1B&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 1C&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>  &lt;/ul&gt;</code></pre></li>
-                <li><pre><code>  &lt;h3&gt;Group 2&lt;/h3&gt;</code></pre></li>
-                <li><pre><code>  &lt;ul&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 2A&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 2B&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>    &lt;li&gt;Song Title 2C&gt;&lt;li&gt;</code></pre></li>
-                <li><pre><code>  &lt;/ul&gt;</code></pre></li>
-                <li><code>&lt;/div&gt;</code></li>
-                <li><code>...</code></li>
-            </ol>
-        </dd>
-        </dl>
         </section>
         <section>
             <h4>The CSS</h4>
-            <p>You can link to audioplayer.css in the head or copy and paste the code into your main css file.
-                The Rhythnic Audio Player uses jQuery, so at the top of the audioplayer.css file, I've pasted
-                the necessary code for the jQuery slider. In your main css file, make a rule for the audioplayer
-                so that you can control the size and position of the audioplayer. If you want to, you can change
-                the whole look of the audio player by changing the css in audioplayer.css.  If I have time down
-                the road, I'll create some more themes for the audio player, or if anyone wants to send me one
-                to post on this tutorial for download, my email address is at the bottom of the page.
+            <p>You can link to rhythnic-audio.css in the head or copy and paste the code into your main css file.
+                At the top of the rhythnic-audio.css file, there's a rule for the rhythnic-audio container.  Use that
+                to position and size the player.  All the elements in the player are sized with ems, so you can use the
+                font-size rule for the rhythnic-audio container to scale the player up and down.
+                If anyone wants to send me an alternate css theme, I'll try to include it in the package for the player,
+                so that people can have some fast, easy options for a nice-looking player.
             </p>
             <p class="codedesc">  With font-size set to 100%, the audio player
-                is at it's natural size.  You can adjust the font-size of .audioplayer to increase or decrease the
-                size of the player.  To prevent the playlist container from changing height when you open and close the
-                playlist, specify a height (not necessary for single song players).
+                is at it's natural size.  You can adjust the font-size of .rhythnic-audio to increase or decrease the
+                size of the player.
             </p>
             <dl class="codelist">
-        <dt>CSS rule for .audioplayer in your main css file</dt>
+        <dt>CSS rule for .rhythnic-audio in your main css file</dt>
         <dd>
             <ol>
-                <li><code>.audioplayer {</code></li>
+                <li><code>.rhythnic-audio {</code></li>
                 <li><pre><code>    font-size: 100%;</code></pre></li>
-                <li><pre><code>    height: 12em;</code></pre></li>
                 <li><code>}</code></li>
             </ol>
         </dd>
         </dl>
-        <p class="codedesc">Here is the code used for the alternate playlist layout at the top of the page.
-                I put each unordered list inside of divs with a class of songlist, and I put an h4 header inside
-                of each div.  If you would like more clarification, please look at the source code for this page.
-                You can see how the alternate layout playlist is setup in the HTML.
-            </p>
-            <dl class="codelist">
-                <dt>CSS for alternate playlist layout</dt>
-                <dd>
-                    <ol>
-                        <li><code>.audioplayer {</code></li>
-                        <li><pre><code>    font-size: 100%;</code></pre></li>
-                        <li><pre><code>    margin: 0 auto;</code></pre></li>
-                        <li><code>}</code></li>
-                        <li><code></code></li>
-                        <li><code>/* Alternate playlist layout */</code></li>
-                        <li><code>.audioplayer.alt {</code></li>
-                        <li><pre><code>    width: 90%;</code></pre></li>
-                        <li><pre><code>    text-align: center;</code></pre></li>
-                        <li><code>}</code></li>
-                        <li><code></code></li>
-                        <li><code>.audioplayer.alt .controls {</code></li>
-                        <li><pre><code>    margin: 0 auto;</code></pre></li>
-                        <li><pre><code>    padding-bottom: .3em;</code></pre></li>
-                        <li><pre><code>    border-radius: 1em;</code></pre></li>
-                        <li><pre><code>}</code></pre></li>
-                        <li><code></code></li>
-                        <li><code>.audioplayer.alt .songList {</code></li>
-                        <li><pre><code>    width: 13em;</code></pre></li>
-                        <li><pre><code>    display: inline-block;</code></pre></li>
-                        <li><pre><code>}</code></pre></li>
-                    </ol>
-                </dd>
-            </dl>
+        <p>One thing to keep in mind is that when you show/hide the playlist tracks via the
+            show/hide button, the size of the player expands and contracts.  In the options, you have the choice of
+            disabling the show/hide feature by locking the playlist view, open or close.  There's no skip button, so you
+            might not want to lock it closed, but you can hit the up or down arrows to change tracks.  You could also
+            specify a height for the player, the height that it has when opened, assuming that you're not using a border
+            and background color for the player.  Else, put it in another div and specify the height for that div.
+        </p>
+        <p class="codedesc">If your curious about the code used to modify the player to achieve the alternate layout
+            at the top of the page, the code for that is at the bottom of the css file.
+        </p>
         </section>
         <section>
             <h4>The Javascript</h4>
-            <p>Put audioplayer.min.js, modernizr.custom.59041.js, and jquery.ui-slider.js in your script directory (js).
-                The Rhythnic audioplayer depends on jQuery and the other js files, so you have to link to them
-                before linking to the audioplayer.js file. The best place to include scripts, Modernizr excluded, is
+            <p>Put rhythnic-audio.min.js, modernizr.custom.59041.js, and jquery.ui-slider.js in your script directory (js).
+                The Rhythnic rhythnic-audio depends on jQuery and the other js files, so you have to link to them
+                before linking to the rhythnic-audio.js file. The best place to include scripts, Modernizr excluded, is
                at the bottom of the body container.
             </p>
             <p class="codedesc">  The first 2 lines get jQuery from Google's CDN with jquery.com as a fallback.  The 3rd and 4th line
-                import the jquery.ui-slider and audioplayer javascript files.  Inside of jQuery.ui-slider.js I've cut and pasted the code
+                import the jquery.ui-slider and rhythnic-audio javascript files.  Inside of jQuery.ui-slider.js I've cut and pasted the code
                 for touch-punch, a jQuery plugin that enables touch events for jQuery ui.
             </p>
             <dl class="codelist">
-                <dt>Link to jQuery, jquery ui slider, and audioplayer</dt>
+                <dt>Link to jQuery, jquery ui slider, and rhythnic-audio</dt>
                 <dd>
                     <ol>
                         <li><code>&lt;script src = "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;</code></li>
                         <li><code>&lt;script&gt;window.jQuery || document.write('&lt;script src="//codeorigin.jquery.com/jquery-1.10.2.min.js"&gt;&lt;\/script&gt;')&lt;/script&gt;</code></li>
                         <li><code>&lt;script src="js/jquery-ui-slider.js"&gt;&lt;/script&gt;</code></li>
-                        <li><code>&lt;script src="js/audioplayer.min.js"&gt;&lt;/script&gt;</code></li> 
+                        <li><code>&lt;script src="js/rhythnic-audio.min.js"&gt;&lt;/script&gt;</code></li> 
                     </ol>
                 </dd>
             </dl>
 
-            <p class="codedesc">This code will create the audioplayer for all divs that have a class of audioplayer.  If you have multiple
-                audio players on the same page, replace the ".audioplayer" query with a class or id that is unique to each player.
+            <p class="codedesc">This code will create the rhythnic-audio for all divs that have a class of rhythnic-audio.  If you have multiple
+                audio players on the same page, replace the ".rhythnic-audio" query with a class or id that is unique to each player.
                 The Rhythnic Audio Player supports 3 MIME types, mp4, ogg, and mpeg.  To support all browsers, you should include an ogg
                 file and either an mp4 or mpeg file for each song in the playlist.  Use the MIME type as the keys for the dictionaries
                 in the playlist.
@@ -324,7 +269,7 @@
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
                         <li><pre><code>  (function ($) {</code></pre></li>
-                        <li><pre><code>    $('div.audioplayer').audioplayer({</code></pre></li>
+                        <li><pre><code>    $('div.rhythnic-audio').rhythnic-audio({</code></pre></li>
                         <li><pre><code>      playlist: [{</code></pre></li>
                         <li><pre><code>          mp4: "path/to/mp4/file.m4a",</code></pre></li>
                         <li><pre><code>          ogg: "path/to/ogg/file.ogg",</code></pre></li>
@@ -342,7 +287,7 @@
                 <dt>Playlist player</dt>
                 <dd>
                     <ol>
-                        <li><code>$('div.audioplayer').audioplayer({</code></li>
+                        <li><code>$('div.rhythnic-audio').rhythnic-audio({</code></li>
                         <li><pre><code>  playlist:</code></pre></li>
                         <li><pre><code>    [{</code></pre></li>
                         <li><pre><code>      mp4: "audio/Moon-River.aac",</code></pre></li>
@@ -382,7 +327,7 @@
             <p>All of the options, except for the playlist
                 parameter, are optional and can be included in any order. In regard to the last four options,
                 they are needed in case you want to change the font icon system.
-                You should also change the class names in the actual "i" elements in the .audioplayer container, if you
+                You should also change the class names in the actual "i" elements in the .rhythnic-audio container, if you
                 decide to change font icon systems.  Also, false is the default setting for all true/false options.
             </p>
             <p>To create an alternate look for your playlist as shown at the top of the page, set hidePlaylist to false
@@ -397,7 +342,7 @@
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
                         <li><pre><code>  (function ($) {</code></pre></li>
-                        <li><pre><code>    $('div.audioplayer.alt').audioplayer({</code></pre></li>
+                        <li><pre><code>    $('div.rhythnic-audio.alt').rhythnic-audio({</code></pre></li>
                         <li><pre><code>      playlist:</code></pre></li>
                         <li><pre><code>        [{</code></pre></li>
                         <li><pre><code>          mpeg: "audio/A-Tired-Apartment.mp3",</code></pre></li>
@@ -452,38 +397,35 @@
 <script src="js/rhythnic-audio.js"></script>
 
 <script defer>(function(document, window){
-
-    try {
-        
-        var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"),
-            {
-                "mime": "mpeg",
-                "tracks": {"ogg": ["audio/Rhythnic.ogg"]}
-            }
-        );
-        
-        var multiPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.multi"),
-            {
-                "mime": "mpeg",
-                "tracks": {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
-                                   "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
-            }
-        );
-        
-        var altPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.alt"),
-            {
-                "mime": "mpeg",
-                "lockPlaylist": true,
-                "tracks": {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
-                                   "audio/A-Tired-Apartment.ogg", "audio/Ego-Tripping.ogg", "audio/Lies-Of-Liars.ogg",
-                                    "audio/Cigarettes-In-Snowmen.ogg"]}
-            }
-        );
-        
-    } catch (error) {
-        alert("Error:" + error.message);
-    }    
     
+    var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"),
+        {
+            "mime": "mpeg",
+            "tracks": {"ogg": ["audio/Rhythnic.ogg"]}
+        }
+    );
+    
+    var multiPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.multi"),
+        {
+            "mime": "mpeg",
+            "tracks": {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
+                               "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
+        }
+    );
+    
+    var altPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.alt"),
+        {
+            "mime": "mpeg",
+            "lockPlaylist": true,
+            "tracks": {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
+                               "audio/A-Tired-Apartment.ogg", "audio/Ego-Tripping.ogg", "audio/Lies-Of-Liars.ogg",
+                                "audio/Cigarettes-In-Snowmen.ogg"]}
+        }
+    );
+    
+    singlePlayer.init();
+    multiPlayer.init();
+    altPlayer.init();
 
 })(document, window);</script>
 </body>

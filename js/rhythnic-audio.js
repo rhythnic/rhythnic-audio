@@ -2,22 +2,20 @@ function RhythnicAudio (elem, options) {
     var self = this;
     
     self.audio = document.createElement('audio');
-    self.audioTest(); //test browser support for the audio element
-    
-    self.elem = elem; //div container for the playlist
-    self.controls = self.elem.children[0]; //container for playlist controls
-    self.play = self.controls.children[0]; //play,pause icon element
-    self.seek = self.controls.querySelector('.seek'); //range input slider, seek
-    self.duration = self.elem.querySelector('.duration'); //song duration display
-    self.time = self.elem.querySelector('.time'); //song current time display
-    self.playlistView = self.elem.querySelector('.toggle-playlist-view'); //toggle playlist view icon element
     self.bTimeSlide = false; //boolean tells if seek bar is being dragged by the user
     self.options = options || {}; //global options
     self.tracks = []; //list of paths to audio files
     self.titles = []; //list of 'a' element nodes, track list
     self.current = 0; //current track
     
-    self.init();
+    /* HTML elements */
+    self.elem = elem; //div container for the playlist
+    self.controls = self.elem.querySelector(".controls"); //container for playlist controls
+    self.play = self.controls.querySelector(".play");//play,pause icon element
+    self.seek = self.controls.querySelector('.seek'); //range input slider, seek
+    self.duration = self.controls.querySelector('.duration'); //song duration display
+    self.time = self.controls.querySelector('.time'); //song current time display
+    self.playlistView = self.elem.querySelector('.toggle-playlist-view'); //toggle playlist view icon element
 }
 
 /* Test browser's support for the audio tag, throw error if no support */
@@ -30,9 +28,12 @@ RhythnicAudio.prototype.audioTest = function() {
 RhythnicAudio.prototype.init = function() {
     var self = this;
     
+    self.audioTest(); //test browser support for the audio element
     self.controls.style.display = "block";
     self.overrideOptions(self.defaultOptions, self.options);
     self.getTracksAndTitles(self.elem.children[1]);
+    self.removeElementFocus();
+    
     self.audioSetup();
     self.bindEvents();
     
@@ -53,24 +54,64 @@ RhythnicAudio.prototype.init = function() {
 RhythnicAudio.prototype.bindEvents = function() {
     var self = this;
     
-    self.play.addEventListener("click", function(){
-        self.togglePlay(self.audio.paused);
-    }, false);
+    self.controls.addEventListener("click", function(e){
+        switch(e.target) {
+            case self.play: self.togglePlay(self.audio.paused); break;
+            case self.playlistView: self.togglePlaylistView(); break;
+        }
+    }, false);      
     
-    self.playlistView.addEventListener('click', function(){
-        self.togglePlaylistView();
-    }, false);
-    
-    self.titles.forEach(function(title){
-        title.addEventListener("click", function(e) {
+    self.elem.addEventListener("click", function(e){
+        if (e.target.nodeName == "A") {
             e.preventDefault();
-            if (this.parentElement.className.indexOf("selected") == -1) {
-                self.playTrack(self.titles.indexOf(this));
-            } else {
+            if (e.target.parentElement.className.indexOf("selected") == -1) {
+                self.playTrack(self.titles.indexOf(e.target));
+        } else {        
                 self.togglePlay(self.audio.paused);
             }
-        }, false);
-    });
+        }
+    }, false);
+    
+    self.elem.addEventListener("keydown", function(e) {
+        switch(e.keyCode){
+            case 32: e.preventDefault(); self.togglePlay(self.audio.paused); break;
+            case 37: e.preventDefault(); self.audio.currentTime -= 2; break;
+            case 39: e.preventDefault(); self.audio.currentTime += 2; break;
+            case 38: e.preventDefault(); self.playTrack(self.current - 1); break;
+            case 40:e.preventDefault(); self.playTrack(self.current + 1); break;
+        }               
+    }, false);
+    
+    self.seek.addEventListener("keydown", function(e) {
+        switch(e.keyCode) {
+
+        }
+    }, false);
+
+    
+    self.audio.addEventListener("loadedmetadata", function() {
+        if (self.audio.duration != Number.POSITIVE_INFINITY && self.audio.duration != Number.NEGATIVE_INFINITY){
+            self.seek.max = self.audio.duration;
+            self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
+        } else {
+            self.duration.innerHTML = "?:??";
+        }
+    }, false);
+    
+    self.audio.addEventListener("timeupdate", function()  {
+        if ( !self.bTimeSlide ) {
+            self.seek.value = self.audio.currentTime;
+            self.time.innerHTML = self.formatTime(self.audio.currentTime);
+        }
+    }, false);
+    
+    self.audio.addEventListener('ended', function() {
+        if (self.tracks.length > 1) {
+            self.playTrack(self.current + 1);
+        } else {
+            self.togglePlay(false);
+        }
+    }, false);   
     
     self.seek.addEventListener("mousedown", function() {
         self.bTimeSlide = true;
@@ -97,47 +138,6 @@ RhythnicAudio.prototype.bindEvents = function() {
         self.audio.currentTime = self.seek.value;
         self.bTimeSlide = false;
     }, false);
-    
-    self.elem.addEventListener("keyup", function(e) {
-        e.preventDefault();
-        switch(e.keyCode){
-            case 32: self.togglePlay(self.audio.paused); break;
-            case 37: self.playTrack(self.current - 1); break;
-            case 39: self.playTrack(self.current + 1); break;
-        }
-    }, false);
-    
-    self.elem.addEventListener("keydown", function(e) {
-        e.preventDefault();
-        switch(e.keyCode){
-            case 38: self.audio.volume = (self.audio.volume < 0.95) ? self.audio.volume + .05 : 1; break;
-            case 40: self.audio.volume = (self.audio.volume > 0.05) ? self.audio.volume - .05 : 0; break;
-        }
-    }, false);
-    
-    self.audio.addEventListener("loadedmetadata", function() {
-        if (self.audio.duration != Number.POSITIVE_INFINITY && self.audio.duration != Number.NEGATIVE_INFINITY){
-            self.seek.max = self.audio.duration;
-            self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
-        } else {
-            self.duration.innerHTML = "?:??";
-        }
-    }, false);
-    
-    self.audio.addEventListener("timeupdate", function()  {
-        if ( !self.bTimeSlide ) {
-            self.seek.value = self.audio.currentTime;
-            self.time.innerHTML = self.formatTime(self.audio.currentTime);
-        }
-    }, false);
-    
-    self.audio.addEventListener('ended', function() {
-        if (self.tracks.length > 1) {
-            self.playTrack(self.current + 1);
-        } else {
-            self.togglePlay(false);
-        }
-    }, false);                
 };
 
 /*  Setup and initiate track playback of track at index
@@ -233,6 +233,13 @@ RhythnicAudio.prototype.togglePlaylistView = function() {
 RhythnicAudio.prototype.formatTime = function( time ) {
     var seconds = Math.floor(time % 60);
     return Math.floor( time / 60 ) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+};
+
+RhythnicAudio.prototype.removeElementFocus = function() {
+    this.titles.forEach(function(title){
+        title.setAttribute("tabindex", "-1");
+        title.style.outline = "none";
+}); 
 };
 
 /* Override default options with user provided options */
