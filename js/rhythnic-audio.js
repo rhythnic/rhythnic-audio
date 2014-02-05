@@ -11,6 +11,7 @@ function RhythnicAudio (elem, options) {
     /* HTML elements */
     self.elem = elem; //div container for the playlist
     self.controls = self.elem.querySelector(".controls"); //container for playlist controls
+    self.playlist = self.elem.querySelector(".playlist"); //container for the lists that contain the audio links
     self.play = self.controls.querySelector(".play");//play,pause icon element
     self.seek = self.controls.querySelector('.seek'); //range input slider, seek
     self.duration = self.controls.querySelector('.duration'); //song duration display
@@ -31,7 +32,7 @@ RhythnicAudio.prototype.init = function() {
     self.audioTest(); //test browser support for the audio element
     self.controls.style.display = "block";
     self.overrideOptions(self.defaultOptions, self.options);
-    self.getTracksAndTitles(self.elem.children[1]);
+    self.getTracksAndTitles(self.playlist);
     self.removeElementFocus();
     
     self.audioSetup();
@@ -47,7 +48,10 @@ RhythnicAudio.prototype.init = function() {
         
         if (self.options.lockPlaylist)
             self.playlistView.style.display = "none";
-    } 
+    }
+    
+    if (self.options.autoplay)
+        self.togglePlay(self.audio.paused);
 };
 
 /* Bind event listeners for mouse, touch, and keyboard */
@@ -220,11 +224,11 @@ RhythnicAudio.prototype.querySelectAll = function(container, tags) {
     to/from the playlist container.  The transition rules are set in the CSS. */
 RhythnicAudio.prototype.togglePlaylistView = function() {
     if (this.options.hidePlaylist == true) {
-        this.elem.children[1].className = 
-            this.elem.children[1].className.replace(" hide", '');
+        this.playlist.className = 
+            this.playlist.className.replace(" hide", '');
         this.options.hidePlaylist = false;
     } else {
-        this.elem.children[1].className += " hide";
+        this.playlist.className += " hide";
         this.options.hidePlaylist = true;
     }
 };
@@ -254,6 +258,7 @@ RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
 /* Default options */
 RhythnicAudio.prototype.defaultOptions = {
     "mime" : "mp4",
+    "autoplay" : false,
     "hidePlaylist" : false,
     "lockPlaylist" : false,
     "playIcon" : "fa-play",

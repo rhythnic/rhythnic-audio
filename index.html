@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Rhytnic Audio Player - a simple, accessible audio player for the web">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
     <link href="css/rhythnic-audio.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
 </head>
@@ -97,16 +98,16 @@
     </div>
     <section><div class="container">
         <h3>About the Rhythnic Audio Player</h3>
-        <p>The Rhythnic Audio Player is a a light-weight, highly customizable audio player for the web.  It utilizes the audio tag,
+        <p>The Rhythnic Audio Player is a light-weight, highly customizable audio player for the web.  It utilizes the audio tag,
             javascript, and css to give you a logo-free music player that you can style with css.  It isn't built to enable a flash
             fallback for broswers that don't support the audio tag.  The way I see it, if Google stops supporting IE8, then I can too.
             If a browser doesn't support the audio tag or javascript, the playlist displays as a list of links to audio files.
         </p>
         <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
-            On the downside, there are bound to be issues the come up, but we'll cross those bridges as we come to Internet Explorer. For now,
+            On the downside, there are bound to be issues that come up, but we'll cross those bridges as we come to Internet Explorer. For now,
             I've kept the player lightweight in anticipation that support for HTML5 standards will only get better.  You can change the styling
-            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses font icons so that you can
-            change their color with css.  Let's get into the player a little bit so you can get it working, if this is what you're looking for.
+            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses an icon font system so that you can
+            change the icon's color with css.  Let's get into the player a little bit so you can get it working, if this is what you're looking for.
         </p>
     </div></section>
     <section><div class="container">
@@ -115,7 +116,7 @@
         <h4>The Zip File</h4>
         <p>Files and folders in the zip file.</p>
         <dl>
-            <dt>Index.html</dt>
+            <dt>index.html</dt>
             <dd>The HTML file for this tutorial page.</dd>
             <dt>css</dt>
             <dd>main.css - the css file for this tutorial page</dd>
@@ -131,7 +132,7 @@
         
         </p>
         <p class="codedesc">The HEAD <i class="fa fa-male"></i> <i class="fa fa-female"></i><br>Link to Font Awesome to enable the icons to display.  Put rhythnic-audio.css in your css folder
-            and link to it.  The file main.css refers to whatever your primary css file is for your page.  It's not referring to the
+            and link to it.  The file main.css refers to whatever your primary css file is for your page.  It's not referring to
             main.css in the zip file (that's for this here page, dag nabbit).  If you copy and paste the rules from rhythnic-audio.css
             into your primary css file, you can omit the link to rhythnic-audio.css.
         </p>
@@ -151,17 +152,18 @@
                 </ol>
             </dd>
         </dl>
-        <p>FREEDOM! (Voice of the late Chris Farely: Did you see that part where Mel Gibson was all like "FREEDOM"?  That was awesome!)</p>
+        <p>FREEDOM! (Voice of Chris Farely: Did you see that part where Mel Gibson was all like "FREEDOM"?  That was awesome!)</p>
         <p>Let's look at the player HTML.  When I say freedom, what I mean is this:  you can change the order of the elements inside of the
-            controls div, and you can include multiple lists of type ul or ol, or both, with headers or images in between and all that jazz.
-            But don't get too carried away or it'll become the css version of a Christmas lights knot.
+            controls div, and you can include multiple lists of type ul or ol, or both, with headers or images in between the lists and all that jazz.
+            But don't get too carried away or it'll become the css version of the Christmas lights knot in Christmas Vacation.
             You can alter all the colors and styling via css, but we already talked about that.
         </p>
         <p class="codedesc">This example is for a one song player.  There's no difference to creating a playlist player or a one banger.
             The only difference is in the number of songs you include in the list.  If there's only one song, the player will remove the
             icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback, but that's where
-            the player gets the info for the track titles and the paths to the audio files.  Make sure to keep all the class names the same (with the
-            exception of changing the font icon system, but more on that later).  The javascript uses the class names to find the elements.
+            the player gets the info for the track titles and the paths to the audio files.  The javascript uses the class names to find the elements.
+            This allows you the FREEDOM to swap elements around for your design, but make sure to keep the class names or you'll break the player,
+            (classes:  rhythnic-audio, controls, play, seek, time, duration, toggle-playlist-view, playlist).
             If you use the code exactly as is, you shouldn't have any problems, and if it ain't broke don't fix it.
         </p>
         <dl class="codelist">
@@ -188,16 +190,11 @@
         </dd>
         </dl>
         <p>The audio player uses <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>,
-            a popular brand of font icons, which work by assigning classes to i elements.  Any i element with an "fa" class
-            is a Font Awesome icon.  The other class names assist in the functioning of the plugin. I chose Font Awesome because it's
-            free and very user friendly.
-        </p>
-        <p>I chose to include the entire Font Awesome collection by linking to it in the head section for a few reasons,
-            even though we're downloading more than is necessary. The first reason is that it keeps the rhythnic-audio package simple.
-            Also, the less I integrate the font icon system, the easier it is for developers to integrate the rhythnic-audio plugin
-            with the other font icon systems. You're welcome to use another font icon system, but you have to change the class names to
+            a popular icon font brand, which work by assigning classes to i elements.  Any i element with an "fa" class
+            is a Font Awesome icon. I chose Font Awesome because it's free and very user friendly.
+            You're welcome to use another icon font system, but you have to change the class names to
             match whatever you decide to use. You'll also need to specify the new class names in the options object when you create the
-            jQuery object.  This is explained better in the options section below.
+            player object.  This is explained better in the options section below.
         </p>
         </section>
         <section>
@@ -265,16 +262,13 @@
         <section>
             <h4>Audio type support</h4>
             <p>The player's default option for mime type is mp4, because that seems to be the most widely supported.
-                If you're unfamiliar, different browsers support different types of audio files, so you player allows
+                If you're unfamiliar, different browsers support different types of audio files, so the Rhythnic Audio player allows
                 you to include several audio types, just in case. The default mime type (mp4) is referring to the links to the
                 audio files inside of the player html.  In my experience, declaring an mp4 mime type also allows for the playback
                 of mp3 files too, but just to be safe, if you're using files that aren't of the mp4 mime type, then override the
                 default mime type by passing the new mime type as an option when you create the player in javascript.
             </p>
-            <p class="codedesc">To add a backup audio type, pass it in with the options object.  The "tracks" key refers to another
-                object that holds the file paths.  Inside of the tracks object, create keys for the mime types and use sets of
-                strings for your audio paths as the value to those mime type keys.
-            </p>
+            <p class="codedesc">Since we used mp3 files in our example above, we're going to specify the mpeg mime type here.</p>
             <dl class="codelist">
                 <dt>Specifying an mpeg mime type</dt>
                 <dd>
@@ -287,8 +281,12 @@
                     </ol>
                 </dd>
             </dl>
-            <p class="codedesc">In this example, we're using an mp4 mime type file in our link, and providing mp3 and ogg backup files.
-                In reality you only need mp3 or mp4, because all browsers that support mp4 also support mp3 and visa versa.</p>
+            <p>To add a backup audio type, pass it in with the options object.  The "tracks" key refers to another
+                object that holds the file paths.  Inside of the tracks object, create keys for the mime types and use sets of
+                strings for your audio paths as the value to those mime type keys.
+            </p>
+            <p class="codedesc">In this example, we're assuming that we used an mp4 mime type file in our links, and we're providing mp3 and ogg backup files.
+                In reality you only need mp3 or mp4, because all browsers that support mp4 also support mp3 and vice versa.</p>
             <dl class="codelist">
                 <dt>Adding backup audio files</dt>
                 <dd>
@@ -306,85 +304,45 @@
         <section>
             <h4>The Options</h4>
             <dl>
-                <dt>playlist</dt>
-                <dd>This is a list of dictionaries for the paths to your audio files.</dd>
-                <dt>autoplay - true/<u>false</u></dt>
-                <dd>Start playback when the page loads</dd>
-                <dt>hidePlaylist - true/<u>false</u></dt>
-                <dd>Hide all song titles after the first song.  User will need to expand the list via the button.</dd>
-                <dt>lockPlaylist - true/<u>false</u></dt>
-                <dd>Remove the playlist show/hide button from the player.  User will be unable to hide or show the playlist.</dd>
+                <dt>tracks</dt>
+                <dd>Backup audio file paths, object of key value pairs where the key is the mime type and the value is a set of strings, paths to the audio files.</dd>
+                <dt>mime</dt>
+                <dd>Mime type for the audio files in your list of links (inside the playlist container), default is mp4.</dd>
+                <dt>autoplay</dt>
+                <dd>Start playback when the page loads, true or false, default is false.</dd>
+                <dt>hidePlaylist</dt>
+                <dd>Playlist closes on page load so that only one song is visible, true or false, default is false.</dd>
+                <dt>lockPlaylist</dt>
+                <dd>Remove the playlist show/hide button from the player.  User will be unable to open/close playlist.  True or false, default is false.</dd>
                 <dt>playIcon</dt>
-                <dd>Specify a font icon class for the play icon.</dd>
+                <dd>Specify a icon font class for the play icon.  Necessary only if you want to change the icon or icon font system.  Default is "fa-play".</dd>
                 <dt>pauseIcon</dt>
-                <dd>Specify a font icon class for the pause icon.</dd>
-                <dt>muteIcon</dt>
-                <dd>Specify a font icon class for the muted icon.</dd>
-                <dt>unmuteIcon</dt>
-                <dd>Specify a font icon class for the unmute.</dd>
+                <dd>Specify a icon font class for the pause icon.  Necessary only if you want to change the icon or icon font system.  Default is "fa-pause".</dd>
             </dl>
-            <p>All of the options, except for the playlist
-                parameter, are optional and can be included in any order. In regard to the last four options,
-                they are needed in case you want to change the font icon system.
+            <p>All of the options are optional and can be included in any order. In regard to the last two options,
+                they are needed in case you want to change the icon font system.
                 You should also change the class names in the actual "i" elements in the .rhythnic-audio container, if you
-                decide to change font icon systems.  Also, false is the default setting for all true/false options.
+                decide to change icon font systems.  Also, false is the default setting for all true/false options.  To lock your playlist in the open position,
+                just set lockPlaylist to true.
             </p>
-            <p>To create an alternate look for your playlist as shown at the top of the page, set hidePlaylist to false
-                and lockPlaylist to true.  This will lock your playlist song titles to be permanantly visable.  You can then
-                give that audio player another class and style the list(s) however you would like.
-            </p>
-            <p class="codedesc">Here's the javascript for the alternate playlist layout.  Here I've set lockPlaylist to true and hidePlaylist is false by default.
-            </p>
-            <dl class="codelist">
-                <dt>Javascript for the playlist with an alternate layout</dt>
-                <dd>
-                    <ol>
-                        <li><code>&lt;script&gt;</code></li>
-                        <li><pre><code>  (function ($) {</code></pre></li>
-                        <li><pre><code>    $('div.rhythnic-audio.alt').rhythnic-audio({</code></pre></li>
-                        <li><pre><code>      playlist:</code></pre></li>
-                        <li><pre><code>        [{</code></pre></li>
-                        <li><pre><code>          mpeg: "audio/A-Tired-Apartment.mp3",</code></pre></li>
-                        <li><pre><code>          ogg: "audio/A-Tired-Apartment.ogg",</code></pre></li>
-                        <li><pre><code>        },{</code></pre></li>
-                        <li><pre><code>          mpeg: "audio/Ego-Tripping.mp3",</code></pre></li>
-                        <li><pre><code>          ogg: "audio/Ego-Tripping.ogg",</code></pre></li>
-                        <li><pre><code>        },{</code></pre></li>
-                        <li><pre><code>          mpeg: "audio/Lies-Of-Liars.mp3",</code></pre></li>
-                        <li><pre><code>          ogg: "audio/Lies-Of-Liars.ogg",</code></pre></li>
-                        <li><pre><code>        },{</code></pre></li>
-                        <li><pre><code>          mpeg: "audio/Cigarettes-In-Snowmen.mp3",</code></pre></li>
-                        <li><pre><code>          ogg: "audio/Cigarettes-In-Snowmen.ogg",</code></pre></li>
-                        <li><pre><code>        }],</code></pre></li>
-                        <li><pre><code>      lockPlaylist: true</code></pre></li>
-                        <li><pre><code>    });</code></pre></li>
-                        <li><pre><code>  })(jQuery);</code></pre></li>
-                        <li><code>&lt;/script&gt;</code></li>
-                    </ol>
-                </dd>
-            </dl>
         </section>
-        
+        <section>
+            <h4>Accesssibility</h4>
+            <p>I've done a few things to make the player more accessible, in the design and operation of the player.  In the design, I made the play button big,
+            and a border that changes color on focus.  The player also has a tabindex of 0, so it can be selected using the tab key.  If the player is selected,
+            then the user can operate the player via the keyboard.  The space bar will play/pause the current track.  The up and down arrows will navigate through
+            the tracks in the playlist, and the left/right arrows rewind and fast-forward respectively.</p>
+        </section>
     </div></section>
     <section><div class="container">
         <h3>Rhythnic Audio Player is open source</h3>
-        <p>This plugin is open source and there is a public repository for it on Bitbucket called
-            <a href="http://bitbucket.org/rhythnic/audio-player">rhythnic/audio-player</a>. There are a few design choices
-            that I'm considering for the future.
-        </p>
-        <ul>
-            <li>Smaller single-song player</li>
-            <li>Pop-up / drop-down vertical sliders for the volume and seek</li>
-            <li>Skip back button for playlist navigation</li>
-            <li>Scrolling song titles</li>
-            <li>Switching from jQuery UI to jQuery Mobile</li>
-        </ul>
-        <p>I will continue to develop it here and there in the future as time allows,
+        <p>This audio player is open source and there is a public repository for it on Bitbucket called
+            <a href="http://bitbucket.org/rhythnic/rhythnic-audio">rhythnic-audio</a>. I will continue to develop it here and there in the future as time allows,
             but anyone is able to fork the git project and continue development.
         </p>
     </div></section>
     <footer><div class="container">
-        <p>The Rhythnic Audio Player jQuery Plugin is released under the open source software license.  Anyone
+        <p>The Rhythnic Audio Player is released under the MIT License for open source software.  Anyone
            may download it for free, change it at will, and use it for commercial purposes.</p>
         <p><script>
             var username = "nick", hostname = "rhythnic.com", linktext = username + "@" + hostname;
@@ -400,24 +358,24 @@
     
     var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"),
         {
-            "mime": "mpeg",
-            "tracks": {"ogg": ["audio/Rhythnic.ogg"]}
+            "mime" : "mpeg",
+            "tracks" : {"ogg": ["audio/Rhythnic.ogg"]}
         }
     );
     
     var multiPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.multi"),
         {
-            "mime": "mpeg",
-            "tracks": {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
+            "mime" : "mpeg",
+            "tracks" : {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
                                "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
         }
     );
     
     var altPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.alt"),
         {
-            "mime": "mpeg",
-            "lockPlaylist": true,
-            "tracks": {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
+            "mime" : "mpeg",
+            "lockPlaylist" : true,
+            "tracks" : {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
                                "audio/A-Tired-Apartment.ogg", "audio/Ego-Tripping.ogg", "audio/Lies-Of-Liars.ogg",
                                 "audio/Cigarettes-In-Snowmen.ogg"]}
         }

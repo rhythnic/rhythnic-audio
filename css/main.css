@@ -84,6 +84,8 @@ article header a {
 article header a:hover, article header a:focus { color: #fff; }
 article header a:active { color: #bdbdbd; }
 
+article header small { display: block; }
+
 /* article footer */
 article footer {
     background: #689CD3;
@@ -139,14 +141,9 @@ h2 .logoFont {
 /* code */
 code {
     font: 0.9em "Courier New", Courier, monospace;
-    white-space: pre-wrap;       /* css-3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
-.codelist { border: 1px solid #aaa; }
+.codelist { border: 1px solid #aaa; overflow-x: auto;}
 
 .codelist dt {
     background: #ddd;
@@ -163,6 +160,8 @@ code {
     border-right: 0.1em solid #fff;
     padding: 0.1em 0.6em;
 }
+
+.codelist dt, .codelist dd { float:left; }
 
 
 /*
@@ -187,7 +186,7 @@ code {
         padding-bottom: 1em;
     }
     
-    .audioplayer { font-size: 100%; }
+    .rhythnic-player { font-size: 100%; }
     
     .demo section:nth-child(4) {
         width: 30em;        
