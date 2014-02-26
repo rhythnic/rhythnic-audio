@@ -44,7 +44,7 @@
     transition: height .3s, opacity .3s, padding-top .3s, padding-bottom .3s, transform .3s;
 }
 
-.rhythnic-audio .hide li:not(.selected) {
+.rhythnic-audio .plHide li:not(.selected) {
     height: 0;
     opacity: 0;
     padding-top: 0;

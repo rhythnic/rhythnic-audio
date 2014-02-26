@@ -225,10 +225,10 @@ RhythnicAudio.prototype.querySelectAll = function(container, tags) {
 RhythnicAudio.prototype.togglePlaylistView = function() {
     if (this.options.hidePlaylist == true) {
         this.playlist.className = 
-            this.playlist.className.replace(" hide", '');
+            this.playlist.className.replace(" plHide", '');
         this.options.hidePlaylist = false;
     } else {
-        this.playlist.className += " hide";
+        this.playlist.className += " plHide";
         this.options.hidePlaylist = true;
     }
 };
@@ -261,6 +261,7 @@ RhythnicAudio.prototype.defaultOptions = {
     "autoplay" : false,
     "hidePlaylist" : false,
     "lockPlaylist" : false,
+    "showCurrentTrack" : true,
     "playIcon" : "fa-play",
     "pauseIcon" : "fa-pause",
     "tracks" : {}
