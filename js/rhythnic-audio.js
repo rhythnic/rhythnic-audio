@@ -35,8 +35,8 @@ RhythnicAudio.prototype.init = function() {
     self.getTracksAndTitles(self.playlist);
     self.removeElementFocus();
     
-    self.audioSetup();
     self.bindEvents();
+    self.audioSetup();
     
     if (self.tracks.length <= 1) {
         self.playlistView.style.display = "none";
