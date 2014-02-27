@@ -93,23 +93,25 @@ RhythnicAudio.prototype.bindEvents = function() {
     }, false);
 
     
-    self.audio.addEventListener("loadedmetadata", function() {
-        if (self.audio.duration != Number.POSITIVE_INFINITY && self.audio.duration != Number.NEGATIVE_INFINITY){
-            self.seek.max = self.audio.duration;
-            self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
-        } else {
-            self.duration.innerHTML = "?:??";
+    self.audio.addEventListener("durationchange", function() {
+        if (self.audio.duration != Number.POSITIVE_INFINITY &&
+            self.audio.duration != Number.NEGATIVE_INFINITY &&
+            !isNaN(self.audio.duration) && self.audio.duration !== 0){
+                self.seek.max = self.audio.duration;
+                self.duration.innerHTML = "/" + self.formatTime(self.audio.duration);
         }
     }, false);
     
     self.audio.addEventListener("timeupdate", function()  {
         if ( !self.bTimeSlide ) {
+            if (self.audio.currentTime > self.seek.max) self.seek.max++;
             self.seek.value = self.audio.currentTime;
             self.time.innerHTML = self.formatTime(self.audio.currentTime);
         }
     }, false);
     
     self.audio.addEventListener('ended', function() {
+        if (self.audio.currentTime < self.seek.max) self.seek.max = self.audio.currentTime;
         if (self.tracks.length > 1) {
             self.playTrack(self.current + 1);
         } else {
@@ -175,6 +177,7 @@ RhythnicAudio.prototype.audioSetup = function() {
         if (!found)
             throw new Error("Your browser doesn't support any of the provided audio file types.");
     }
+    this.seek.max = 200;
     this.audio.src = this.tracks[this.current];
     this.titles[this.current].parentElement.className += " selected";
 };
