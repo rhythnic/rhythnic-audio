@@ -9,8 +9,6 @@
     <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
     <link href="css/rhythnic-audio.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script src="js/hand-1.3.5.js"></script>
-    <script language="javascript"> HANDJS.doNotProcessCSS = true;</script>
 </head>
 
 <body>
@@ -106,7 +104,6 @@
             If a browser doesn't support the audio tag or javascript, the playlist displays as a list of links to audio files.
         </p>
         <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
-            On the downside, there are bound to be issues that come up, but we'll cross those bridges as we come to Internet Explorer. For now,
             I've kept the player lightweight in anticipation that support for HTML5 standards will only get better.  You can change the styling
             to your heart's content (or to the limits that are imposed, more on that later).  The player also uses an icon font system so that you can
             change the icon's color with css.  Let's get into the player a little bit so you can get it working, if this is what you're looking for.
@@ -162,11 +159,11 @@
         </p>
         <p class="codedesc">This example is for a one song player.  There's no difference to creating a playlist player or a one banger.
             The only difference is in the number of songs you include in the list.  If there's only one song, the player will remove the
-            icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback, but that's where
+            icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback. That's where
             the player gets the info for the track titles and the paths to the audio files.  The javascript uses the class names to find the elements.
             This allows you the FREEDOM to swap elements around for your design, but make sure to keep the class names or you'll break the player,
             (classes:  rhythnic-audio, controls, play, seek, time, duration, toggle-playlist-view, playlist).
-            If you use the code exactly as is, you shouldn't have any problems, and if it ain't broke don't fix it.
+            If you use the code exactly as is, you shouldn't have any problems.
         </p>
         <dl class="codelist">
         <dt>The rhythnic-audio container</dt>
@@ -283,9 +280,10 @@
                     </ol>
                 </dd>
             </dl>
-            <p>To add a backup audio type, pass it in with the options object.  The "tracks" key refers to another
-                object that holds the file paths.  Inside of the tracks object, create keys for the mime types and use sets of
-                strings for your audio paths as the value to those mime type keys.
+            <p>To add a backup audio type, in case a browser doesn't support your main audio type, pass it in with the options object.
+                The "tracks" key refers to another object that holds the file paths.  Inside of the tracks object, create keys for the
+                mime types and use sets of strings for your audio paths as the value to those mime type keys.  The player uses your mime
+                keys in the object to set the mime type for playback, so make sure your keys specify the correct mime term.
             </p>
             <p class="codedesc">In this example, we're assuming that we used an mp4 mime type file in our links, and we're providing mp3 and ogg backup files.
                 In reality you only need mp3 or mp4, because all browsers that support mp4 also support mp3 and vice versa.</p>
@@ -354,7 +352,7 @@
     </div></footer>
 </article>
 
-<script src="js/rhythnic-audio.js"></script>
+<script src="js/rhythnic-audio.min.js"></script>
 
 <script defer>(function(document, window){
     

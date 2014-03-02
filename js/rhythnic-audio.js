@@ -66,9 +66,11 @@ RhythnicAudio.prototype.bindEvents = function() {
     self.audio.addEventListener("durationchange", function(e) { self.onDurationchange(); });
     self.audio.addEventListener("timeupdate",     function(e) { self.onTimeupdate(); });
     self.audio.addEventListener('ended',          function(e) { self.onEnded(); });   
-    self.seek.addEventListener("pointerdown",     function(e) { self.bTimeSlide = true; });
+    self.seek.addEventListener("mousedown",       function(e) { self.bTimeSlide = true; });
+    self.seek.addEventListener("touchstart",      function(e) { self.bTimeSlide = true; });
     self.seek.addEventListener("change",          function(e) { self.time.innerHTML = self.formatTime(self.seek.value); });
-    self.seek.addEventListener("pointerup",       function(e) { self.onPointerdownSeek(); });
+    self.seek.addEventListener("mouseup",         function(e) { self.onPointerdownSeek(); });
+    self.seek.addEventListener("touchend",        function(e) { self.onPointerdownSeek(); });
 };
 
 /*
@@ -230,7 +232,6 @@ RhythnicAudio.prototype.defaultOptions = {
     "autoplay" : false,
     "hidePlaylist" : false,
     "lockPlaylist" : false,
-    "showCurrentTrack" : true,
     "playIcon" : "fa-play",
     "pauseIcon" : "fa-pause",
     "tracks" : {}

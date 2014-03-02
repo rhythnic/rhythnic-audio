@@ -10,6 +10,8 @@
 }
 
 .rhythnic-audio .controls {
+    width: 13.8em;
+    margin:auto;
     display: none;
     padding: 1px 0 .5em;
     background: #fff;
@@ -184,10 +186,6 @@
 .rhythnic-audio.alt {
     width: 90%;
     background: #fff;
-}
-
-.rhythnic-audio.alt .controls {
-    text-align: center;
 }
         
 .rhythnic-audio.alt .songList {
