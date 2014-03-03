@@ -100,7 +100,7 @@
         <h3>About the Rhythnic Audio Player</h3>
         <p>The Rhythnic Audio Player is a light-weight, highly customizable audio player for the web.  It utilizes the audio tag,
             javascript, and css to give you a logo-free music player that you can style with css.  It isn't built to enable a flash
-            fallback for broswers that don't support the audio tag.  The way I see it, if Google stops supporting IE8, then I can too.
+            fallback for broswers that don't support the audio tag.
             If a browser doesn't support the audio tag or javascript, the playlist displays as a list of links to audio files.
         </p>
         <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
@@ -200,7 +200,7 @@
             <h4>The CSS</h4>
             <p>You can link to rhythnic-audio.css in the head or copy and paste the code into your main css file.
                 At the top of the rhythnic-audio.css file, there's a rule for the rhythnic-audio container.  Use that
-                to position and size the player.  All the elements in the player are sized with ems, so you can use the
+                to position and size the player.  All the elements in the player are sized with em, so you can use the
                 font-size rule for the rhythnic-audio container to scale the player up and down.
                 If anyone wants to send me an alternate css theme, I'll include it in the package for the player,
                 so that people can have some fast, easy options for a nice-looking player.
@@ -233,7 +233,7 @@
         <section>
             <h4>The Javascript</h4>
             <p class="codedesc">Put rhythnic-audio.min.js into your script directory (js).  At the bottom of our html file, just inside the body
-            closing tage, we'll put our line to rhythnic-audio.js and write the script to create the player.
+            closing tage, we'll put our line to rhythnic-audio.min.js and write the script to create the player.
             </p>
             <dl class="codelist">
                 <dt>Link to rhythnic-audio.js</dt>
@@ -243,8 +243,8 @@
                     </ol>
                 </dd>
             </dl>
-            <p class="codedesc">This code will create a player for the div contianer with a class of rhythnic-audio.  If you have multiple
-                audio players on the same page, repeat the code for each player and use unique class names.
+            <p class="codedesc">This code will create a player for the div container with a class of rhythnic-audio.  If you have multiple
+                audio players on the same page, repeat the code for each player and use unique ids or class names to differentiate the players.
             </p>
             <dl class="codelist">
                 <dt>One song player</dt>
@@ -283,7 +283,7 @@
             <p>To add a backup audio type, in case a browser doesn't support your main audio type, pass it in with the options object.
                 The "tracks" key refers to another object that holds the file paths.  Inside of the tracks object, create keys for the
                 mime types and use sets of strings for your audio paths as the value to those mime type keys.  The player uses your mime
-                keys in the object to set the mime type for playback, so make sure your keys specify the correct mime term.
+                keys to set the mime type for playback, so make sure your keys specify the correct mime term.
             </p>
             <p class="codedesc">In this example, we're assuming that we used an mp4 mime type file in our links, and we're providing mp3 and ogg backup files.
                 In reality you only need mp3 or mp4, because all browsers that support mp4 also support mp3 and vice versa.</p>
@@ -293,8 +293,8 @@
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
                         <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"),</code></pre></li>
-                        <li><pre><code>         { "tracks" : { "ogg" : [buttons-and-bows.oga],</code></pre></li>
-                        <li><pre><code>                        "mpeg" : [buttons-and-bows.mp3] } });</code></pre></li>
+                        <li><pre><code>         { "tracks" : { "ogg" : ["buttons-and-bows.oga", "One-headlight.oga"],</code></pre></li>
+                        <li><pre><code>                        "mpeg" : ["buttons-and-bows.mp3", "One-headlight.mp3"] } });</code></pre></li>
                         <li><pre><code>  player.init();</code></pre></li>
                         <li><code>&lt;/script&gt;</code></li>
                     </ol>
@@ -354,7 +354,7 @@
 
 <script src="js/rhythnic-audio.min.js"></script>
 
-<script defer>(function(document, window){
+<script>(function(document, window){
     
     var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"),
         {
