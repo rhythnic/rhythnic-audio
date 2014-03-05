@@ -1,16 +1,4 @@
-//Rhythnic Icon Maker
-RhythnicIcon={NS:"http://www.w3.org/2000/svg",draw:function(e,t,n){var r=this,n=n||{},i=this.icons[e];for(var s in i.attr){t.setAttribute(s,i.attr[s])}this.drawChildren(i.children,t,n)},
-drawChildren:function(e,t,n){var r=this;for(var i in e){var s=e[i];if(Object.prototype.toString.call(s)==="[object Array]"){var o=document.createElementNS(this.NS,"g");t.appendChild(o);
-s.forEach(function(e){r.drawShape(i,e,o,n)})}else{this.drawShape(i,s,t,n)}}},drawShape:function(e,t,n,r){var i=this,s=null;s=document.createElementNS(this.NS,e);
-for(var o in t.attr){switch(o){case"points":s.setAttribute(o,t.attr[o]);break;case"text":s.innerHTML=r["title"]?r["title"]:t.attr[o];break;default:s.setAttribute(o,t.attr[o][1]*100+"%");break}}
-for(o in t.style){s.style[o]=t.style[o]}n.appendChild(s);this.drawChildren(t.children,s,r)},icons:{play:{attr:{viewBox:"0 0 10 10"},children:{polygon:{attr:{points:"0,0 10,5 0,10"},
-children:{title:{attr:{text:"Play"}}}}}},pause:{children:{rect:[{attr:{width:["w",.4],height:["h",1]}},{attr:{width:["w",.4],height:["h",1],x:["w",.6]}},{attr:{width:["w",1],height:["h",1]},
-style:{"fill-opacity":"0","stroke-opacity":"0"},children:{title:{attr:{text:"Pause"}}}}]}},menu:{children:{rect:[{attr:{width:["w",1],height:["h",.2]}},{attr:{width:["w",1],height:["h",.2],
-y:["h",.4]}},{attr:{width:["w",1],height:["h",.2],y:["h",.8]}},{attr:{width:["w",1],height:["h",1]},style:{"fill-opacity":"0","stroke-opacity":"0"},children:{title:{attr:{text:"Menu"}}}}]}}}};
-
 var iconMaker = new Object(RhythnicIcon);
-
-//Rhythnic Audio
 
 /* Constructor */
 function RhythnicAudio (container) {
@@ -184,6 +172,7 @@ RhythnicAudio.prototype.audioSetup = function() {
             throw new Error("Your browser doesn't support any of the provided audio file types.");
     }
     
+    this.audio.setAttribute("preload", this.options.preload);
     this.audio.src = this.tracks[this.current];
     this.titles[this.current].parentElement.classList.add("selected");
 };
@@ -256,6 +245,7 @@ RhythnicAudio.prototype.overrideOptions = function(defaultOptions, userOptions){
 RhythnicAudio.prototype.defaultOptions = {
     "mime" : "mp4",
     "autoplay" : false,
+    "preload" : "metadata",
     "hidePlaylist" : false,
     "lockPlaylist" : false,
     "tracks" : {},
