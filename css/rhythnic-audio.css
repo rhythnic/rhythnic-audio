@@ -1,5 +1,5 @@
 .rhythnic-audio {
-    width: 13.8em;
+    width: 13.5em;
     font-size: 100%;
     text-align: left;
     border: 2px solid #000;
@@ -10,10 +10,10 @@
 }
 
 .rhythnic-audio .controls {
-    width: 13.8em;
+    width: 13.5em;
     margin:auto;
     display: none;
-    padding: 1px 0 .5em;
+    padding: 1px 0 .2em;
     background: #fff;
 }
 
@@ -28,10 +28,6 @@
     padding-left: 0;
     margin: 0;
     background: #fff;
-}
-
-.rhythnic-audio div+ul, .rhythnic-audio div+ol {
-    margin-top: 0;
 }
 
 .rhythnic-audio li.selected {
@@ -54,37 +50,35 @@
     overflow: hidden;
 }
 
-.rhythnic-audio li:not(.selected):hover {
-    background: #d8d8d8;
-}
+.rhythnic-audio li:not(.selected):hover { background: #d8d8d8; }
 
-.rhythnic-audio li.selected a:hover {
-    cursor: default;
-}
+.rhythnic-audio li.selected a:hover { cursor: default; }
 
-.rhythnic-audio a {
-    display: block;
-}
+.rhythnic-audio a { display: block; }
 
-.rhythnic-audio i {
-    font-size: 3em;
+.rhythnic-audio svg {
+    fill:#000;
     cursor: pointer;
+    display: inline-block;
 }
 
-.rhythnic-audio i:hover {
-    color: #808080;
+.rhythnic-audio svg:hover { fill: #808080; }
+
+.rhythnic-audio .play {
+    width: 2.5em;
+    height: 2.5em;
+    margin-left: .5em;
+    margin-right: .1em;
 }
 
-.rhythnic-audio .toggle-playlist-view {
-    font-size: 1.5em;
-    margin-left: 1.3em;
-    margin-top: .3em;
-    vertical-align: top;
+.rhythnic-audio .plView {
+    width: 1.3em;
+    height: 1em;
+    margin-left: 1.5em;
+    vertical-align: middle;
 }
 
-.rhythnic-audio label {
-    display: none;
-}
+.rhythnic-audio .remove { display: none; }
 
 .rhythnic-audio span {
     -webkit-user-select: none;
@@ -95,14 +89,10 @@
     margin-top: -.3em;
 }
 
-.rhythnic-audio .time {
-    margin-left: .2em;
-}
+.rhythnic-audio .time { margin-left: .7em; }
 
 .rhythnic-audio input[type="range"]{
     width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     margin: 0;
     vertical-align: middle;
@@ -114,7 +104,6 @@
     border-radius: 1em;
     background: #808080;
     box-shadow: inset 0 1px 0 0 #676767, inset 0 -1px 0 0 #737373;
-    -webkit-box-shadow: inset 0 1px 0 0 #676767, inset 0 -1px 0 0 #737373;
     outline: none; /* no focus outline */
 }
 
@@ -180,8 +169,6 @@
     border: 0;
 }
 
-
-
 /* Alternate playlist layout */
 .rhythnic-audio.alt {
     width: 90%;
@@ -192,11 +179,3 @@
     display: inline-block;
     vertical-align: top;
 }
-
-.rhythnic-audio.alt h4 {
-    padding: 0;
-    background: none;
-}
-
-
-

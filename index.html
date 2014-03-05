@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Rhytnic Audio Player - a simple, accessible audio player for the web">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
     <link href="css/rhythnic-audio.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
@@ -25,12 +24,11 @@
                     <h4>Single track</h4>
                     <div class="rhythnic-audio single" tabindex="0">
                         <div class="controls">
-                            <i class="play fa fa-play fa-fw" title="Play Pause"></i>
+                            <svg class="play"></svg>
                             <div>
-                                <label>Seek</label>
                                 <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
-                                <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
+                                <svg class="plView"></svg>
                             </div>
                         </div>
                         <div class="playlist">
@@ -43,12 +41,11 @@
                     <h4>Playlist</h4>
                     <div class="rhythnic-audio multi" tabindex="0">
                         <div class="controls">
-                            <i class="play fa fa-play fa-fw" title="Play Pause"></i>
+                            <svg class="play"></svg>
                             <div>
-                                <label>Seek</label>
                                 <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
-                                <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
+                                <svg class="plView"></svg>
                             </div>
                         </div>
                         <div class="playlist">
@@ -64,12 +61,11 @@
                     <h4>Alternate Playlist layout</h4>
                     <div class="rhythnic-audio alt" tabindex="0">
                         <div class="controls">
-                            <i class="play fa fa-play fa-fw" title="Play Pause"></i>
+                            <svg class="play"></svg>
                             <div>
-                                <label>Seek</label>
                                 <input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1">
                                 <span class="time">0:00</span><span class="duration">/0:00</span>
-                                <i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"></i>
+                                <svg class="plView"></svg>
                             </div>
                         </div>
                         <div class="playlist">
@@ -105,8 +101,9 @@
         </p>
         <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
             I've kept the player lightweight in anticipation that support for HTML5 standards will only get better.  You can change the styling
-            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses an icon font system so that you can
-            change the icon's color with css.  Let's get into the player a little bit so you can get it working, if this is what you're looking for.
+            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses svg for buttons so that they
+            will scale well and you can change the color with css.  Let's get into the player a little bit so you can get it working, if this is
+            what you're looking for.
         </p>
     </div></section>
     <section><div class="container">
@@ -130,13 +127,11 @@
         <p>Let's go over the code for the HTML file that will include the audio player.  We'll start at the top and work down.
         
         </p>
-        <p class="codedesc">The HEAD <i class="fa fa-male"></i> <i class="fa fa-female"></i><br>Link to Font Awesome to enable the icons to display.  Put rhythnic-audio.css in your css folder
-            and link to it.  The file main.css refers to whatever your primary css file is for your page.  It's not referring to
-            main.css in the zip file (that's for this here page, dag nabbit).  If you copy and paste the rules from rhythnic-audio.css
-            into your primary css file, you can omit the link to rhythnic-audio.css.
+        <p class="codedesc">The HEAD <i class="fa fa-male"></i> <i class="fa fa-female"></i><br>Put rhythnic-audio.css in your css folder
+            and link to it.  If you copy and paste the rules from rhythnic-audio.css into your primary css file, you can omit the link to rhythnic-audio.css.
         </p>
         <dl class="codelist">
-            <dt>The HEAD:  CSS, Font Awesome, Viewport</dt>
+            <dt>The HEAD:  CSS, Viewport</dt>
             <dd>
                 <ol>
                     <li><code>&lt;html lang="en"&gt;</code></li>
@@ -144,26 +139,22 @@
                     <li><pre><code>  &lt;meta charset="UTF-8"&gt;</code></pre></li>
                     <li><pre><code>  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</code></pre></li>
                     <li><pre><code>  &lt;title&gt;Your page title&lt;/title&gt;</code></pre></li>
-                    <li><pre><code>  &lt;link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"&gt;</code></pre></li>
                     <li><pre><code>  &lt;link href="/css/rhythnic-audio.css" rel="stylesheet"&gt;</code></pre></li>
-                    <li><pre><code>  &lt;link href="/css/main.css" rel="stylesheet"&gt;</code></pre></li>
+                    <li><pre><code>  &lt;link href="/css/yourcssfile.css" rel="stylesheet"&gt;</code></pre></li>
                     <li><code>&lt;/head&gt;</code></li>
                 </ol>
             </dd>
         </dl>
-        <p>FREEDOM! (Voice of Chris Farely: Did you see that part where Mel Gibson was all like "FREEDOM"?  That was awesome!)</p>
-        <p>Let's look at the player HTML.  When I say freedom, what I mean is this:  you can change the order of the elements inside of the
-            controls div, and you can include multiple lists of type ul or ol, or both, with headers or images in between the lists and all that jazz.
-            But don't get too carried away or it'll become the css version of the Christmas lights knot in Christmas Vacation.
-            You can alter all the colors and styling via css, but we already talked about that.
-        </p>
         <p class="codedesc">This example is for a one song player.  There's no difference to creating a playlist player or a one banger.
             The only difference is in the number of songs you include in the list.  If there's only one song, the player will remove the
             icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback. That's where
             the player gets the info for the track titles and the paths to the audio files.  The javascript uses the class names to find the elements.
-            This allows you the FREEDOM to swap elements around for your design, but make sure to keep the class names or you'll break the player,
-            (classes:  rhythnic-audio, controls, play, seek, time, duration, toggle-playlist-view, playlist).
-            If you use the code exactly as is, you shouldn't have any problems.
+            This allows you the FREEDOM to swap elements around for your design, but make sure to keep the class names or you'll break the player.
+            If you use the code exactly as is, you shouldn't have any problems.<br><br>
+            The SVGs take up a large part of the code.  These are the play/pause and playlist view icons.  The class "hideShape," as you
+            may have guessed, hides the shape inside of the SVG object by setting opacity to 0.  The rects with a class of btn actually capture the clicks, although they're hidden.
+            We'll add and remove the hideShape class from the shapes inside of the play SVG when the play button is clicked, so that the view will toggle
+            between play and pause.
         </p>
         <dl class="codelist">
         <dt>The rhythnic-audio container</dt>
@@ -171,12 +162,28 @@
             <ol>
                 <li><code>&lt;div class="rhythnic-audio" tabindex="0"&gt;</code></li>
                 <li><pre><code>  &lt;div class="controls"&gt;</code></pre></li>
-                <li><pre><code>    &lt;i class="play fa fa-play fa-fw" title="Play Pause"&gt;&lt;/i&gt;</code></pre></li>
+                <li><pre><code>    &lt;svg class="play"&gt;</code></pre></li>
+                <li><pre><code>      &lt;polygon points="0,0 40,20 0,40"&gt;</code></pre></li>
+                <li><pre><code>        &lt;title&gt;Play&lt;/title&gt;</code></pre></li>
+                <li><pre><code>      &lt;/polygon&gt;</code></pre></li>
+                <li><pre><code>      &lt;g class="removeShape"&gt;</code></pre></li>
+                <li><pre><code>        &lt;title&gt;Pause&lt;/title&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect width='15' height='38' y='2'/&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect width='15' height='38' y='2' x='20'/&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect class="btn hideShape" width="40" height="40"/&gt;</code></pre></li>
+                <li><pre><code>      &lt;/g&gt;</code></pre></li>
+                <li><pre><code>    &lt;/svg&gt;</code></pre></li>
                 <li><pre><code>    &lt;div&gt;</code></pre></li>
                 <li><pre><code>      &lt;label&gt;Seek&lt;/label&gt;</code></pre></li>
                 <li><pre><code>      &lt;input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1"&gt;</code></pre></li>
                 <li><pre><code>      &lt;span class="time"&gt;0:00&lt;/span&gt;&lt;span class="duration"&gt;/0:00&lt;/span&gt;</code></pre></li>
-                <li><pre><code>      &lt;i class="toggle-playlist-view fa fa-bars" title="Show Hide Playlist"&gt;&lt;/i&gt;</code></pre></li>
+                <li><pre><code>      &lt;svg class="plView"&gt;</code></pre></li>
+                <li><pre><code>        &lt;title&gt;Show/Hide Playlist&lt;/title&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect width="30" height="4"/&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect width="30" height="4" y="7"/&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect width="30" height="4" y="14"/&gt;</code></pre></li>
+                <li><pre><code>        &lt;rect class="btn hideShape" width="30" height="18"/&gt;</code></pre></li>
+                <li><pre><code>      &lt;/svg&gt;</code></pre></li>
                 <li><pre><code>    &lt;/div&gt;</code></pre></li>
                 <li><pre><code>  &lt;/div&gt;</code></pre></li>
                 <li><pre><code>  &lt;div class="playlist"&gt;</code></pre></li>
@@ -188,13 +195,6 @@
             </ol>
         </dd>
         </dl>
-        <p>The audio player uses <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>,
-            a popular icon font brand, which work by assigning classes to i elements.  Any i element with an "fa" class
-            is a Font Awesome icon. I chose Font Awesome because it's free and very user friendly.
-            You're welcome to use another icon font system, but you have to change the class names to
-            match whatever you decide to use. You'll also need to specify the new class names in the options object when you create the
-            player object.  This is explained better in the options section below.
-        </p>
         </section>
         <section>
             <h4>The CSS</h4>
@@ -314,16 +314,9 @@
                 <dd>Playlist closes on page load so that only one song is visible, true or false, default is false.</dd>
                 <dt>lockPlaylist</dt>
                 <dd>Remove the playlist show/hide button from the player.  User will be unable to open/close playlist.  True or false, default is false.</dd>
-                <dt>playIcon</dt>
-                <dd>Specify a icon font class for the play icon.  Necessary only if you want to change the icon or icon font system.  Default is "fa-play".</dd>
-                <dt>pauseIcon</dt>
-                <dd>Specify a icon font class for the pause icon.  Necessary only if you want to change the icon or icon font system.  Default is "fa-pause".</dd>
             </dl>
-            <p>All of the options are optional and can be included in any order. In regard to the last two options,
-                they are needed in case you want to change the icon font system.
-                You should also change the class names in the actual "i" elements in the .rhythnic-audio container, if you
-                decide to change icon font systems.  Also, false is the default setting for all true/false options.  To lock your playlist in the open position,
-                just set lockPlaylist to true.
+            <p>All of the options are optional and can be included in any order. Also, false is the default setting for all true/false options.
+                To lock your playlist in the open position, just set lockPlaylist to true.
             </p>
         </section>
         <section>
@@ -352,39 +345,32 @@
     </div></footer>
 </article>
 
-<script src="js/rhythnic-audio.min.js"></script>
+<script src="js/rhythnic-icon.min.js"></script>
+<script src="js/rhythnic-audio.js"></script>
 
 <script>(function(document, window){
+    //create players
+    var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"));
+    singlePlayer.init({
+        "mime" : "mpeg",
+        "tracks" : {"ogg": ["audio/Rhythnic.ogg"]}
+    });
     
-    var singlePlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.single"),
-        {
-            "mime" : "mpeg",
-            "tracks" : {"ogg": ["audio/Rhythnic.ogg"]}
-        }
-    );
+    var multiPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.multi"));
+    multiPlayer.init({
+        "mime" : "mpeg",
+        "tracks" : {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
+                           "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
+    });
     
-    var multiPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.multi"),
-        {
-            "mime" : "mpeg",
-            "tracks" : {"ogg": ["audio/Ill-Make-You-Wonder.ogg", "audio/Cigarettes-In-Snowmen.ogg",
-                               "audio/A-Tired-Apartment.ogg", "audio/Being-25.ogg"]}
-        }
-    );
-    
-    var altPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.alt"),
-        {
-            "mime" : "mpeg",
-            "lockPlaylist" : true,
-            "tracks" : {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
-                               "audio/A-Tired-Apartment.ogg", "audio/Ego-Tripping.ogg", "audio/Lies-Of-Liars.ogg",
-                                "audio/Cigarettes-In-Snowmen.ogg"]}
-        }
-    );
-    
-    singlePlayer.init();
-    multiPlayer.init();
-    altPlayer.init();
-
+    var altPlayer = new RhythnicAudio(document.querySelector(".rhythnic-audio.alt"));
+    altPlayer.init({
+        "mime" : "mpeg",
+        "lockPlaylist" : true,
+        "tracks" : {"ogg": ["audio/Being-25.ogg", "audio/Ill-Make-You-Wonder.ogg", "audio/One-That-I-Dream-About.ogg",
+                           "audio/A-Tired-Apartment.ogg", "audio/Ego-Tripping.ogg", "audio/Lies-Of-Liars.ogg",
+                            "audio/Cigarettes-In-Snowmen.ogg"]}
+    });
 })(document, window);</script>
 </body>
 </html>
