@@ -1,3 +1,5 @@
+var iconMaker = new Object(RhythnicIcon);
+
 /* Constructor */
 function RhythnicAudio (container) {
     /* Create audio element and do audio support test */
@@ -78,10 +80,12 @@ RhythnicAudio.prototype.bindEvents = function() {
 RhythnicAudio.prototype.drawIcons = function(){
     //create play, pause, and playlist view icons
     iconMaker.draw("play", this.playBtn);
-    var params = {"class": "remove"};
-    iconMaker.draw("pause", this.playBtn, params);
+    var pauseBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    pauseBtn.classList.add("remove");
+    iconMaker.draw("pause", pauseBtn);
+    this.playBtn.appendChild(pauseBtn);
     params = {"title": "Playlist View"};
-    iconMaker.draw("menu", this.viewBtn, params);
+    iconMaker.draw("menu", this.viewBtn);
 };
 
 
