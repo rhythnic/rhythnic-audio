@@ -65,6 +65,7 @@
 .rhythnic-audio svg:hover { fill: #808080; }
 
 .rhythnic-audio .play {
+    display: inline-block;
     width: 2.5em;
     height: 2.5em;
     margin-left: .5em;

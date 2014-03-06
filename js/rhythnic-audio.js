@@ -1,5 +1,3 @@
-var iconMaker = new Object(RhythnicIcon);
-
 /* Constructor */
 function RhythnicAudio (container) {
     /* Create audio element and do audio support test */
@@ -23,7 +21,7 @@ function RhythnicAudio (container) {
     this.tracks = []; //array of paths to audio files
     this.titles = []; //array of 'a' element nodes, track list
     this.getTracksAndTitles(this.playlist);
-    if (this.tracks.length <= 1) this.viewBtn.style.display = "none";
+    if (this.tracks.length <= 1) this.viewBtn.style.setProperty("display", "none");
     
     this.bTimeSlide = false; //boolean tells if seek bar is being dragged by the user
     this.current = 0; //index of current track
@@ -40,12 +38,12 @@ RhythnicAudio.prototype.init = function(options) {
 
     /* Setup player according to options */
     if (this.options.hidePlaylist) this.togglePlaylistView();
-    if (this.options.lockPlaylist) this.viewBtn.style.display = "none";
+    if (this.options.lockPlaylist) this.viewBtn.style.setProperty("display", "none");
     if (this.options.autoplay)     this.togglePlay(this.audio.paused);
     if (this.options.drawIcons) this.drawIcons();
     
     /* HTML element setup */
-    this.controls.style.display = "block";
+    this.controls.style.setProperty("display", "block");
     this.removeElementFocus(this.titles);
     this.playChild  = Array.prototype.slice.call(this.playBtn.children);
     this.playChild[1].classList.add("remove");
@@ -221,7 +219,7 @@ RhythnicAudio.prototype.formatTime = function( time ) {
 RhythnicAudio.prototype.removeElementFocus = function(elementList) {
     elementList.forEach(function(elem){
         elem.setAttribute("tabindex", "-1");
-        elem.style.outline = "none";
+        elem.style.setProperty("outline", "none");
     }); 
 };
 

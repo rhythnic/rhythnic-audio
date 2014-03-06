@@ -101,16 +101,21 @@
         </p>
         <p>This audio player isn't a plugin for jQuery.  I made it instead as a javascript component, so we won't have the overhead of jQuery.
             I've kept the player lightweight in anticipation that support for HTML5 standards will only get better.  You can change the styling
-            to your heart's content (or to the limits that are imposed, more on that later).  The player also uses svg for buttons so that they
-            will scale well and you can change the color with css.  Let's get into the player a little bit so you can get it working, if this is
-            what you're looking for.
+            to your heart's content (or to the limits that are imposed, more on that later).
+        </p>
+        <p>The player uses inline svg for buttons so that they will scale well and you can change the color with css.  The icons can even be polychrome.
+            The icon system, called Rhythnic Icon, is something I just started to develop.  The icons are defined using javascript objects and drawn
+            dynamically.  The code for defining and redering the icons takes up just over 1Kb of space in the minified audio player's script file,
+            so it's a very efficient way of using inline svg icons. At present I've only defined the three icons used in the audio player, but you
+            can view the public Git repository at <a href="//bitbucket.org/">bitbucket.org/rhythnic/rhythnic-icon</a>.
+            Let's get into the player a little bit so you can get it working, if this is what you're looking for.  
         </p>
     </div></section>
     <section><div class="container">
         <h3>How to use the Rhythnic Audio Player</h3>
         <section>
-        <h4>The Zip File</h4>
-        <p>Files and folders in the zip file.</p>
+        <h4>The Files</h4>
+        <p>Files and folders in the Git repository</p>
         <dl>
             <dt>index.html</dt>
             <dd>The HTML file for this tutorial page.</dd>
@@ -127,8 +132,7 @@
         <p>Let's go over the code for the HTML file that will include the audio player.  We'll start at the top and work down.
         
         </p>
-        <p class="codedesc">The HEAD <i class="fa fa-male"></i> <i class="fa fa-female"></i><br>Put rhythnic-audio.css in your css folder
-            and link to it.  If you copy and paste the rules from rhythnic-audio.css into your primary css file, you can omit the link to rhythnic-audio.css.
+        <p class="codedesc">The HEAD<br>Link to rhythnic-audio.css or copy and paste it into your css file.
         </p>
         <dl class="codelist">
             <dt>The HEAD:  CSS, Viewport</dt>
@@ -145,16 +149,12 @@
                 </ol>
             </dd>
         </dl>
-        <p class="codedesc">This example is for a one song player.  There's no difference to creating a playlist player or a one banger.
+        <p class="codedesc">This example is for a one song player.  There's no difference between creating a playlist player or a one banger.
             The only difference is in the number of songs you include in the list.  If there's only one song, the player will remove the
             icon for showing/hiding the playlist view.  The link elements are very important, not just as a fallback. That's where
             the player gets the info for the track titles and the paths to the audio files.  The javascript uses the class names to find the elements.
             This allows you the FREEDOM to swap elements around for your design, but make sure to keep the class names or you'll break the player.
-            If you use the code exactly as is, you shouldn't have any problems.<br><br>
-            The SVGs take up a large part of the code.  These are the play/pause and playlist view icons.  The class "hideShape," as you
-            may have guessed, hides the shape inside of the SVG object by setting opacity to 0.  The rects with a class of btn actually capture the clicks, although they're hidden.
-            We'll add and remove the hideShape class from the shapes inside of the play SVG when the play button is clicked, so that the view will toggle
-            between play and pause.
+            The icon shapes will be inserted into the SVG tags by javascript.  If you use the code exactly as is, you shouldn't have any problems.
         </p>
         <dl class="codelist">
         <dt>The rhythnic-audio container</dt>
@@ -162,28 +162,44 @@
             <ol>
                 <li><code>&lt;div class="rhythnic-audio" tabindex="0"&gt;</code></li>
                 <li><pre><code>  &lt;div class="controls"&gt;</code></pre></li>
-                <li><pre><code>    &lt;svg class="play"&gt;</code></pre></li>
-                <li><pre><code>      &lt;polygon points="0,0 40,20 0,40"&gt;</code></pre></li>
-                <li><pre><code>        &lt;title&gt;Play&lt;/title&gt;</code></pre></li>
-                <li><pre><code>      &lt;/polygon&gt;</code></pre></li>
-                <li><pre><code>      &lt;g class="removeShape"&gt;</code></pre></li>
-                <li><pre><code>        &lt;title&gt;Pause&lt;/title&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect width='15' height='38' y='2'/&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect width='15' height='38' y='2' x='20'/&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect class="btn hideShape" width="40" height="40"/&gt;</code></pre></li>
-                <li><pre><code>      &lt;/g&gt;</code></pre></li>
-                <li><pre><code>    &lt;/svg&gt;</code></pre></li>
+                <li><pre><code>    &lt;svg class="play"&gt;&lt;/svg&gt;</code></pre></li>
                 <li><pre><code>    &lt;div&gt;</code></pre></li>
                 <li><pre><code>      &lt;label&gt;Seek&lt;/label&gt;</code></pre></li>
                 <li><pre><code>      &lt;input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1"&gt;</code></pre></li>
                 <li><pre><code>      &lt;span class="time"&gt;0:00&lt;/span&gt;&lt;span class="duration"&gt;/0:00&lt;/span&gt;</code></pre></li>
-                <li><pre><code>      &lt;svg class="plView"&gt;</code></pre></li>
-                <li><pre><code>        &lt;title&gt;Show/Hide Playlist&lt;/title&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect width="30" height="4"/&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect width="30" height="4" y="7"/&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect width="30" height="4" y="14"/&gt;</code></pre></li>
-                <li><pre><code>        &lt;rect class="btn hideShape" width="30" height="18"/&gt;</code></pre></li>
-                <li><pre><code>      &lt;/svg&gt;</code></pre></li>
+                <li><pre><code>      &lt;svg class="plView"&gt;&lt;/svg&gt;</code></pre></li>
+                <li><pre><code>    &lt;/div&gt;</code></pre></li>
+                <li><pre><code>  &lt;/div&gt;</code></pre></li>
+                <li><pre><code>  &lt;div class="playlist"&gt;</code></pre></li>
+                <li><pre><code>    &lt;ul&gt;</code></pre></li>
+                <li><pre><code>      &lt;li&gt;&lt;a href="audio/buttons-and-bows.mp3" title="Buttons and Bows"&gt;Buttons and Bows&lt;/a&gt;&lt;li&gt;</code></pre></li>
+                <li><pre><code>    &lt;/ul&gt;</code></pre></li>
+                <li><pre><code>  &lt;/div&gt;</code></pre></li>
+                <li><code>&lt;/div&gt;</code></li>
+            </ol>
+        </dd>
+        </dl>
+        <p class="codedesc">If you don't want to use the default icons, you can prevent the player
+        from drawing the icons by passing "drawIcons": false inside of the options object when you create the player.  Note that the SVG with the class of
+        play will have 2 direct children, the play and the pause shapes.  The player toggles between them by hiding one at a time with a class of remove.
+        If you substitute icon fonts or images, for example, you need to include 2 elements inside of a div with the class of play, and give the pause
+        element a class of "remove".  You'll also need to change the css.  Here's what the code would look like using Font Awesome.
+        </p>
+        <dl class="codelist">
+        <dt>Using your own icons</dt>
+        <dd>
+            <ol>
+                <li><code>&lt;div class="rhythnic-audio" tabindex="0"&gt;</code></li>
+                <li><pre><code>  &lt;div class="controls"&gt;</code></pre></li>
+                <li><pre><code>    &lt;div class="play"&gt;</code></pre></li>
+                <li><pre><code>      &lt;i class="fa fa-play"&gt;&lt;/i&gt;</code></pre></li>
+                <li><pre><code>      &lt;i class="fa fa-pause remove"&gt;&lt;/i&gt;</code></pre></li>
+                <li><pre><code>    &lt;/div&gt;</code></pre></li>
+                <li><pre><code>    &lt;div&gt;</code></pre></li>
+                <li><pre><code>      &lt;label&gt;Seek&lt;/label&gt;</code></pre></li>
+                <li><pre><code>      &lt;input class="seek" type="range" min="0" max="100" value="0" title="Seek" tabindex="-1"&gt;</code></pre></li>
+                <li><pre><code>      &lt;span class="time"&gt;0:00&lt;/span&gt;&lt;span class="duration"&gt;/0:00&lt;/span&gt;</code></pre></li>
+                <li><pre><code>      &lt;i class="plView fa fa-menu-bars"&gt;&lt;/i&gt;</code></pre></li>
                 <li><pre><code>    &lt;/div&gt;</code></pre></li>
                 <li><pre><code>  &lt;/div&gt;</code></pre></li>
                 <li><pre><code>  &lt;div class="playlist"&gt;</code></pre></li>
@@ -269,13 +285,12 @@
             </p>
             <p class="codedesc">Since we used mp3 files in our example above, we're going to specify the mpeg mime type here.</p>
             <dl class="codelist">
-                <dt>Specifying an mpeg mime type</dt>
+                <dt>Specifying an mpeg mime type for html links</dt>
                 <dd>
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
-                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"),</code></pre></li>
-                        <li><pre><code>         { "mime" : "mpeg" });</code></pre></li>
-                        <li><pre><code>  player.init();</code></pre></li>
+                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"));</code></pre></li>
+                        <li><pre><code>  player.init( {"mime" : "mpeg"} );</code></pre></li>
                         <li><code>&lt;/script&gt;</code></li>
                     </ol>
                 </dd>
@@ -292,10 +307,10 @@
                 <dd>
                     <ol>
                         <li><code>&lt;script&gt;</code></li>
-                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"),</code></pre></li>
-                        <li><pre><code>         { "tracks" : { "ogg" : ["buttons-and-bows.oga", "One-headlight.oga"],</code></pre></li>
-                        <li><pre><code>                        "mpeg" : ["buttons-and-bows.mp3", "One-headlight.mp3"] } });</code></pre></li>
-                        <li><pre><code>  player.init();</code></pre></li>
+                        <li><pre><code>  var tracks = { "ogg" : ["buttons-and-bows.oga", "One-headlight.oga"],</code></pre></li>
+                        <li><pre><code>                 "mpeg" : ["buttons-and-bows.mp3", "One-headlight.mp3"] };</code></pre></li>
+                        <li><pre><code>  var player = new RhythnicAudio(document.querySelector(".rhythnic-audio"));</code></pre></li>
+                        <li><pre><code>  player.init( {"tracks" : tracks} );</code></pre></li>
                         <li><code>&lt;/script&gt;</code></li>
                     </ol>
                 </dd>
@@ -303,21 +318,39 @@
         </section>
         <section>
             <h4>The Options</h4>
+            <dl class="codelist">
+                <dt>Default options</dt>
+                <dd>
+                    <ol>
+                        <li><code>{</code></li>
+                        <li><pre><code>  "mime" " "mp4",</code></pre></li>
+                        <li><pre><code>  "autoplay" : false,</code></pre></li>
+                        <li><pre><code>  "preload" : "metadata",</code></pre></li>
+                        <li><pre><code>  "hidePlaylist" : false,</code></pre></li>
+                        <li><pre><code>  "lockPlaylist" : false,</code></pre></li>
+                        <li><pre><code>  "drawIcons": true</code></pre></li>
+                        <li><pre><code>  "tracks" : {},</code></pre></li>
+                        <li><code>}</code></li>
+                    </ol>
+                </dd>
+            </dl>
             <dl>
+                <dt>mime</dt>
+                <dd>Mime type for the audio files in your list of links (inside the playlist container)</dd>
+                <dt>autoplay</dt>
+                <dd>Start playback when the page loads.</dd>
+                <dt>preload</dt>
+                <dd>Sets the <a href="//www.w3schools.com/tags/att_audio_preload.asp">preload</a> attribute for the audio element.</dd>
+                <dt>hidePlaylist</dt>
+                <dd>Playlist closes on page load so that only one song is visible.</dd>
+                <dt>lockPlaylist</dt>
+                <dd>Remove the playlist show/hide button from the player.  User will be unable to open/close playlist.</dd>
+                <dt>drawIcons</dt>
+                <dd>Should the player draw the default icons.  Set to false if you are using other icons.</dd>
                 <dt>tracks</dt>
                 <dd>Backup audio file paths, object of key value pairs where the key is the mime type and the value is a set of strings, paths to the audio files.</dd>
-                <dt>mime</dt>
-                <dd>Mime type for the audio files in your list of links (inside the playlist container), default is mp4.</dd>
-                <dt>autoplay</dt>
-                <dd>Start playback when the page loads, true or false, default is false.</dd>
-                <dt>hidePlaylist</dt>
-                <dd>Playlist closes on page load so that only one song is visible, true or false, default is false.</dd>
-                <dt>lockPlaylist</dt>
-                <dd>Remove the playlist show/hide button from the player.  User will be unable to open/close playlist.  True or false, default is false.</dd>
             </dl>
-            <p>All of the options are optional and can be included in any order. Also, false is the default setting for all true/false options.
-                To lock your playlist in the open position, just set lockPlaylist to true.
-            </p>
+            <p>All of the options are optional and can be included in any order.</p>
         </section>
         <section>
             <h4>Accesssibility</h4>
@@ -330,8 +363,8 @@
     <section><div class="container">
         <h3>Rhythnic Audio Player is open source</h3>
         <p>This audio player is open source and there is a public repository for it on Bitbucket called
-            <a href="http://bitbucket.org/rhythnic/rhythnic-audio">rhythnic-audio</a>. I will continue to develop it here and there in the future as time allows,
-            but anyone is able to fork the git project and continue development.
+            <a href="http://bitbucket.org/rhythnic/rhythnic-audio">rhythnic-audio</a>. I will continue to develop it here and there
+            in the future as time allows, but anyone is able to fork the git project and continue development.
         </p>
     </div></section>
     <footer><div class="container">
@@ -345,8 +378,7 @@
     </div></footer>
 </article>
 
-<script src="js/rhythnic-icon.min.js"></script>
-<script src="js/rhythnic-audio.js"></script>
+<script src="js/rhythnic-audio.min.js"></script>
 
 <script>(function(document, window){
     //create players
