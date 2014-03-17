@@ -1,5 +1,3 @@
-var iconMaker = new Object(RhythnicIcon);
-
 /* Constructor */
 function RhythnicAudio (container) {
     /* Create audio element and do audio support test */
@@ -47,8 +45,9 @@ RhythnicAudio.prototype.init = function(options) {
     /* HTML element setup */
     this.controls.style.setProperty("display", "block");
     this.removeElementFocus(this.titles);
-    this.playChild  = Array.prototype.slice.call(this.playBtn.children);
-    this.playChild[1].classList.add("remove");
+    this.playChild  = Array.prototype.slice.call(this.playBtn.childNodes);
+    var cls = this.playChild[1].getAttribute("class");
+    if (!cls || cls.indexOf("remove") === -1) this.toggleClass(this.playChild[1], "remove");
     
     //setup audio object according to options
     try { this.audioSetup(); }
@@ -61,7 +60,7 @@ RhythnicAudio.prototype.bindEvents = function() {
     var self = this;
     
     self.playBtn.addEventListener("click",        function(e) { self.togglePlay(self.audio.paused); });
-    self.viewBtn.addEventListener("click",        function(e) { self.toggleView(self.playlist, "plHide"); });
+    self.viewBtn.addEventListener("click",        function(e) { self.playlist.classList.toggle("plHide"); });
     self.playlist.addEventListener("click",       function(e) { self.onClickPlaylist(e); });
     self.container.addEventListener("keydown",    function(e) { self.onKeydownContainer(e); });
     self.audio.addEventListener("durationchange", function(e) { self.onDurationchange(); });
@@ -79,13 +78,13 @@ RhythnicAudio.prototype.bindEvents = function() {
 //Set the pause icon class to remove (display: none)
 RhythnicAudio.prototype.drawIcons = function(){
     //create play, pause, and playlist view icons
-    iconMaker.draw("play", this.playBtn);
+    RhythnicIcon.draw("play", this.playBtn);
     var pauseBtn = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    pauseBtn.classList.add("remove");
-    iconMaker.draw("pause", pauseBtn);
+    pauseBtn.className = "remove";
+    RhythnicIcon.draw("pause", pauseBtn);
     this.playBtn.appendChild(pauseBtn);
     params = {"title": "Playlist View"};
-    iconMaker.draw("menu", this.viewBtn);
+    RhythnicIcon.draw("menu", this.viewBtn);
 };
 
 
@@ -145,9 +144,9 @@ RhythnicAudio.prototype.onPointerdownSeek = function() {
 //Setup and initiate track playback of track at index
 //Remove selected class from previous track LI, add to new track LI
 RhythnicAudio.prototype.playTrack = function(index) {
-    this.titles[this.current].parentElement.classList.remove("selected");
+    this.titles[this.current].parentElement.classList.toggle("selected");
     this.current = (index < 0) ? this.tracks.length - 1 : index % this.tracks.length;
-    this.titles[this.current].parentElement.classList.add("selected");
+    this.titles[this.current].parentElement.classList.toggle("selected");
     this.audio.src = this.tracks[this.current];
     this.togglePlay( this.audio.paused );
 };
@@ -176,7 +175,7 @@ RhythnicAudio.prototype.audioSetup = function() {
     
     this.audio.setAttribute("preload", this.options.preload);
     this.audio.src = this.tracks[this.current];
-    this.titles[this.current].parentElement.classList.add("selected");
+    this.titles[this.current].parentElement.classList.toggle("selected");
 };
 
 
@@ -186,9 +185,9 @@ RhythnicAudio.prototype.togglePlay = function(play) {
     if ( play ) this.audio.play();
     else this.audio.pause();
     
-    if ((play && this.playChild[1].classList.contains("remove")) ||
-        (!play && this.playChild[0].classList.contains("remove"))) {
-        this.playChild.forEach(function(x){ self.toggleView(x, "remove"); });
+    if ((play && this.playChild[1].getAttribute("class").indexOf("remove") !== -1) ||
+        (!play && this.playChild[0].getAttribute("class").indexOf("remove") !== -1)) {
+        this.playChild.forEach(function(x){ self.toggleClass(x, "remove"); });
     }
 };
 
@@ -199,16 +198,6 @@ RhythnicAudio.prototype.getTracksAndTitles = function(playlistContainer) {
     var self = this;
     this.titles = Array.prototype.slice.call(playlistContainer.getElementsByTagName("A"));
     this.titles.forEach(function(a) { self.tracks.push(a.href); });
-};
-
-
-//Check if class exists in element's classList
-//If found, remove it; if not found, add it
-RhythnicAudio.prototype.toggleView = function(element, hiddenClass){
-    if (element.classList.contains(hiddenClass))
-        element.classList.remove(hiddenClass);
-    else
-        element.classList.add(hiddenClass);
 };
 
 
@@ -232,6 +221,17 @@ RhythnicAudio.prototype.removeElementFocus = function(elementList) {
 RhythnicAudio.prototype.audioTest = function(audio) {
     if (!audio.canPlayType)
         throw new Error("Your browser doesn't support the audio tag.\nPlaylist will display as a list of audio links.");
+};
+
+
+//Equivalent of element.classList.toggle(classItem)
+RhythnicAudio.prototype.toggleClass = function(element, classItem){
+    var re = new RegExp("(?:^|\\s)" + classItem + "(?!\\S)", "g");
+    var clsName = element.getAttribute("class");
+    if (re.test(clsName))
+        element.setAttribute("class", clsName.replace(re, ''));
+    else
+        element.setAttribute("class", clsName + " " + classItem);
 };
 
 
